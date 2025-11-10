@@ -882,7 +882,7 @@
           <div class="grid grid-cols-2 gap-4">
             <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
               <div class="text-3xl font-bold text-[#00D9FF]">100%</div>
-              <div class="text-sm text-gray-300 mt-1">Free Forever</div>
+              <div class="text-sm text-gray-300 mt-1">Free</div>
             </div>
             <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
               <div class="text-3xl font-bold text-[#00D9FF]">MIT</div>
