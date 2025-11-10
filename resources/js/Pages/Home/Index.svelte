@@ -1,13 +1,52 @@
 <script>
   import { router } from '@inertiajs/svelte';
   import KlikAjaLogo from '../../Components/KlikAjaLogo.svelte';
+  import axios from 'axios';
   
-  let url = '';
-  let customAlias = '';
-  let isLoading = false;
+  let url = $state('');
+  let customAlias = $state('');
+  let isLoading = $state(false);
+  let isCheckingAlias = $state(false);
+  let aliasAvailable = $state(null);
+  let debounceTimer;
+  
+  // Debounce alias check
+  async function checkAliasAvailability(alias) {
+    if (!alias || alias.trim() === '') {
+      aliasAvailable = null;
+      return;
+    }
+
+    isCheckingAlias = true;
+    
+    try {
+      const response = await axios.get(`/api/check-alias/${alias}`);
+      aliasAvailable = response.data.available;
+    } catch (error) {
+      console.error('Error checking alias:', error);
+      aliasAvailable = null;
+    } finally {
+      isCheckingAlias = false;
+    }
+  }
+
+  // Watch customAlias changes with debounce
+  $effect(() => {
+    if (customAlias) {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        checkAliasAvailability(customAlias);
+      }, 500);
+    } else {
+      aliasAvailable = null;
+    }
+  });
   
   function handleShorten() {
     if (!url) return;
+    if (customAlias && aliasAvailable === false) {
+      return; // Don't submit if alias is taken
+    }
     
     isLoading = true;
     router.post('/shorten', {
@@ -114,22 +153,55 @@
             <label for="alias" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
               Custom Alias <span class="text-gray-400 font-normal">(opsional)</span>
             </label>
-            <div class="flex items-center gap-2">
-              <span class="text-gray-500 dark:text-gray-400 text-sm">klikaja.app/</span>
-              <input
-                bind:value={customAlias}
-                type="text"
-                id="alias"
-                placeholder="promo-ramadan"
-                class="flex-1 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-4 py-3 focus:border-[#FF6B35] focus:ring-0 focus:outline-none transition-colors duration-150"
-              />
+            <div class="relative">
+              <div class="flex items-center gap-2">
+                <span class="text-gray-500 dark:text-gray-400 text-sm">klikaja.app/</span>
+                <div class="flex-1 relative">
+                  <input
+                    bind:value={customAlias}
+                    type="text"
+                    id="alias"
+                    placeholder="promo-ramadan"
+                    class="w-full bg-white dark:bg-gray-700 border-2 {aliasAvailable === false ? 'border-red-500' : aliasAvailable === true ? 'border-green-500' : 'border-gray-300 dark:border-gray-600'} text-gray-900 dark:text-white rounded-lg px-4 py-3 pr-10 focus:border-[#FF6B35] focus:ring-0 focus:outline-none transition-colors duration-150"
+                  />
+                  {#if isCheckingAlias}
+                    <div class="absolute right-3 top-1/2 -translate-y-1/2">
+                      <svg class="animate-spin h-5 w-5 text-gray-400" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                    </div>
+                  {:else if customAlias && aliasAvailable === true}
+                    <div class="absolute right-3 top-1/2 -translate-y-1/2 text-green-500">
+                      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                      </svg>
+                    </div>
+                  {:else if customAlias && aliasAvailable === false}
+                    <div class="absolute right-3 top-1/2 -translate-y-1/2 text-red-500">
+                      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                      </svg>
+                    </div>
+                  {/if}
+                </div>
+              </div>
+              {#if customAlias && aliasAvailable === false}
+                <p class="mt-2 text-sm text-red-600 dark:text-red-400">
+                  ❌ Alias sudah digunakan, pilih yang lain
+                </p>
+              {:else if customAlias && aliasAvailable === true}
+                <p class="mt-2 text-sm text-green-600 dark:text-green-400">
+                  ✅ Alias tersedia!
+                </p>
+              {/if}
             </div>
           </div>
 
           <!-- Submit Button -->
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || (customAlias && aliasAvailable === false)}
             class="w-full bg-[#FF6B35] hover:bg-[#004E89] text-white font-bold py-4 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
             {#if isLoading}

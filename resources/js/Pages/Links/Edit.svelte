@@ -114,7 +114,7 @@
 
         <div class="space-y-3">
           {#each urls as urlItem, index}
-            <div class="flex gap-3">
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
               <div class="flex-1">
                 <input
                   type="url"
@@ -125,31 +125,33 @@
                 />
               </div>
 
-              {#if rotationMethod === 'weighted'}
-                <div class="w-24">
-                  <input
-                    type="number"
-                    bind:value={urlItem.weight}
-                    min="1"
-                    max="100"
-                    placeholder="Weight"
-                    class="w-full px-3 py-3 bg-gray-50 focus:outline-none dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent text-gray-900 dark:text-white text-center"
-                  />
-                </div>
-              {/if}
+              <div class="flex gap-2 sm:gap-3">
+                {#if rotationMethod === 'weighted'}
+                  <div class="w-24 sm:w-24">
+                    <input
+                      type="number"
+                      bind:value={urlItem.weight}
+                      min="1"
+                      max="100"
+                      placeholder="Weight"
+                      class="w-full px-3 py-3 bg-gray-50 focus:outline-none dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent text-gray-900 dark:text-white text-center"
+                    />
+                  </div>
+                {/if}
 
-              {#if urls.length > 1}
-                <button
-                  type="button"
-                  onclick={() => removeUrl(index)}
-                  class="px-3 py-3 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200"
-                  title="Remove URL"
-                >
-                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                  </svg>
-                </button>
-              {/if}
+                {#if urls.length > 1}
+                  <button
+                    type="button"
+                    onclick={() => removeUrl(index)}
+                    class="px-4 sm:px-3 py-3 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200 flex-shrink-0"
+                    title="Remove URL"
+                  >
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                  </button>
+                {/if}
+              </div>
             </div>
           {/each}
         </div>
@@ -273,7 +275,7 @@
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Rotation Method
               </label>
-              <div class="grid grid-cols-3 gap-3">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <button
                   type="button"
                   onclick={() => rotationMethod = 'random'}
@@ -369,17 +371,17 @@
       </div>
 
       <!-- Submit Button -->
-      <div class="flex gap-4">
+      <div class="flex flex-col-reverse sm:flex-row gap-3 sm:gap-4">
         <a
           href="/links"
           use:inertia
-          class="flex-1 px-6 py-4 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200 font-semibold text-center"
+          class="w-full sm:flex-1 px-6 py-4 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200 font-semibold text-center"
         >
           Batal
         </a>
         <button
           type="submit"
-          class="flex-1 px-6 py-4 bg-gradient-to-r from-[#FF6B35] to-[#ff5722] text-white rounded-lg hover:shadow-lg transition-all duration-200 font-semibold"
+          class="w-full sm:flex-1 px-6 py-4 bg-gradient-to-r from-[#FF6B35] to-[#ff5722] text-white rounded-lg hover:shadow-lg transition-all duration-200 font-semibold"
         >
           💾 Simpan Perubahan
         </button>
