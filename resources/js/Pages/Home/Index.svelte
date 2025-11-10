@@ -660,7 +660,7 @@
       <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-6 rounded-2xl border-2 border-green-500/30 dark:border-green-600/30">
         <div class="text-3xl mb-3">💰</div>
         <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">
-          100% Gratis Selamanya
+          100% Gratis
         </h3>
         <p class="text-sm text-gray-600 dark:text-gray-400">
           Semua fitur premium tanpa biaya bulanan. Kompetitor charge $9-$29/bulan untuk fitur yang sama!
