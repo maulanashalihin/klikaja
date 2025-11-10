@@ -1,7 +1,7 @@
 # 🚀 KlikAja - Smart Link Shortener
 
 <div align="center">
-  <img src="https://klikaja.app/logo.png" alt="KlikAja Logo" width="200"/>
+  <img src="https://klikaja.app/public/android-icon-192x192.png" alt="KlikAja Logo" width="200"/>
   <p><strong>Satu klik, semua terhubung. Link yang lebih cerdas, lebih cepat, dan lebih terukur.</strong></p>
   
   [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -517,6 +517,48 @@ Bantu improve dokumentasi, tutorial, atau terjemahan
 Beri star di GitHub dan share ke komunitas!
 
 **Baca [Contributing Guide](CONTRIBUTING.md) untuk detail lengkap.**
+
+---
+
+## 💼 Need Help Building Your Application?
+
+I'm available for consulting and custom development projects. Whether you need:
+
+- 🚀 **SaaS application development** - From MVP to production
+- 💼 **Full-stack web applications** - Modern, scalable solutions
+- 🔧 **API development and integration** - RESTful, GraphQL, WebSocket
+- 📱 **Modern responsive interfaces** - React, Vue, Svelte, or vanilla
+- ⚡ **Performance optimization** - Speed up your existing applications
+
+**Feel free to reach out:** [maulana@drip.id](mailto:maulana@drip.id)
+
+I can help you build your next project with the same speed and quality as KlikAja! 🚀
+
+---
+
+## 💖 Support This Project
+
+If you find KlikAja useful, consider supporting its development:
+
+### Ways to Support:
+
+- ⭐ **[Star this repository](https://github.com/maulanashalihin/klikaja)** - Show your appreciation
+- 💖 **[Become a Sponsor](https://github.com/sponsors/maulanashalihin)** - Support ongoing development
+- 🐛 **[Report bugs](https://github.com/maulanashalihin/klikaja/issues)** - Help improve the project
+- 🔧 **[Contribute code](https://github.com/maulanashalihin/klikaja/pulls)** - Submit Pull Requests
+- 📢 **Share** - Tell others about KlikAja
+- 📝 **Write** - Blog posts, tutorials, case studies
+
+### Sponsorship Tiers:
+
+| Tier | Amount | Benefits |
+|------|--------|----------|
+| ☕ Coffee | $5/month | Name in README |
+| 🍕 Pizza | $25/month | Logo in README + Priority support |
+| 🚀 Rocket | $100/month | Logo on website + Feature requests |
+| 💎 Diamond | $500/month | Dedicated support + Custom features |
+
+**Your support helps keep this project free and actively maintained!** 🙏
 
 ---
 
