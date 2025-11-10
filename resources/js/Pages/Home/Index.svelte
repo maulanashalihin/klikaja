@@ -9,6 +9,7 @@
   let isCheckingAlias = $state(false);
   let aliasAvailable = $state(null);
   let debounceTimer;
+  let mobileMenuOpen = $state(false);
   
   // Debounce alias check
   async function checkAliasAvailability(alias) {
@@ -96,22 +97,84 @@
 
 <div class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
   <!-- Header -->
-  <header class="border-b border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center h-16">
-        <KlikAjaLogo />
-        
-        <div class="flex items-center gap-4">
-          <a href="/login" class="text-sm font-medium text-gray-700 hover:text-[#FF6B35] dark:text-gray-300 dark:hover:text-[#00D9FF] transition-colors duration-200">
-            Masuk
-          </a>
-          <a href="/register" class="px-4 py-2 text-sm font-semibold text-white bg-[#FF6B35] hover:bg-[#004E89] rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-            Daftar Gratis
-          </a>
-        </div>
-      </div>
-    </div>
-  </header>
+    <header class="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-800">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="/" class="flex items-center gap-2 text-2xl">
+                    <div class="relative">
+                        <img src="/public/favicon-32x32.png" alt="KlikAja Logo" class="w-8 h-8">
+                    </div>
+                    <span class="font-bold">
+                        <span class="text-[#FF6B35]">Klik</span><span class="text-[#004E89] dark:text-white">Aja</span>
+                    </span>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="/about" class="text-gray-700 dark:text-gray-300 hover:text-[#FF6B35] dark:hover:text-[#00D9FF] transition-colors font-medium">
+                        Tentang
+                    </a>
+                    <a href="/features" class="text-gray-700 dark:text-gray-300 hover:text-[#FF6B35] dark:hover:text-[#00D9FF] transition-colors font-medium">
+                        Fitur
+                    </a>
+                    <a href="/pricing" class="text-gray-700 dark:text-gray-300 hover:text-[#FF6B35] dark:hover:text-[#00D9FF] transition-colors font-medium">
+                        Harga
+                    </a>
+                    <a href="/login" class="text-[#FF6B35] dark:text-[#00D9FF] hover:text-[#004E89] dark:hover:text-[#FF6B35] font-semibold transition-colors">
+                        Masuk
+                    </a>
+                    <a href="/register" class="bg-[#FF6B35] hover:bg-[#004E89] text-white font-semibold px-4 py-2 rounded-lg transition-all shadow-md hover:shadow-lg">
+                        Daftar Gratis
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button
+                    onclick={() => mobileMenuOpen = !mobileMenuOpen}
+                    class="md:hidden p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    aria-label="Toggle menu"
+                >
+                    {#if mobileMenuOpen}
+                        <!-- Close Icon -->
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    {:else}
+                        <!-- Hamburger Icon -->
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    {/if}
+                </button>
+            </div>
+
+            <!-- Mobile Navigation -->
+            {#if mobileMenuOpen}
+                <div class="md:hidden py-4 border-t border-gray-200 dark:border-gray-800">
+                    <div class="flex flex-col space-y-3">
+                        <a href="/about" class="text-gray-700 dark:text-gray-300 hover:text-[#FF6B35] dark:hover:text-[#00D9FF] transition-colors font-medium px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">
+                            Tentang
+                        </a>
+                        <a href="/features" class="text-gray-700 dark:text-gray-300 hover:text-[#FF6B35] dark:hover:text-[#00D9FF] transition-colors font-medium px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">
+                            Fitur
+                        </a>
+                        <a href="/pricing" class="text-gray-700 dark:text-gray-300 hover:text-[#FF6B35] dark:hover:text-[#00D9FF] transition-colors font-medium px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">
+                            Harga
+                        </a>
+                        <div class="border-t border-gray-200 dark:border-gray-800 pt-3 mt-3 space-y-3">
+                            <a href="/login" class="block text-center text-[#FF6B35] dark:text-[#00D9FF] hover:text-[#004E89] dark:hover:text-[#FF6B35] font-semibold px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                                Masuk
+                            </a>
+                            <a href="/register" class="block text-center bg-[#FF6B35] hover:bg-[#004E89] text-white font-semibold px-4 py-3 rounded-lg transition-all shadow-md hover:shadow-lg">
+                                Daftar Gratis
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {/if}
+        </nav>
+    </header>
 
   <!-- Hero Section -->
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
