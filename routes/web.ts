@@ -19,6 +19,16 @@ const Route = new HyperExpress.Router();
 Route.get("/", HomeController.index);
 
 /**
+ * SEO Routes
+ * Routes for search engine optimization
+ * ------------------------------------------------
+ * GET  /sitemap.xml - XML sitemap for search engines
+ * GET  /robots.txt - Robots.txt for crawler instructions
+ */
+Route.get("/sitemap.xml", HomeController.sitemap);
+Route.get("/robots.txt", HomeController.robots);
+
+/**
  * SEO-Friendly Static Pages
  * Crawlable HTML pages for better SEO
  * ------------------------------------------------
