@@ -28,7 +28,7 @@ jobs:
         script: |
           # Perintah-perintah ini akan dijalankan di server produksi Anda
           echo "🚀 Starting deployment..."
-          cd /root/klikaja # Ganti dengan path ke direktori proyek Anda
+          cd /root/klikaja/build # Ganti dengan path ke direktori proyek Anda
           
           echo " pulling code from GitHub..."
           git pull origin main
@@ -36,12 +36,7 @@ jobs:
           echo " installing dependencies..."
           # Contoh untuk Node.js (sesuaikan dengan teknologi Anda)
           npm install 
-
-          echo " building..."
-          npm run build
-
-          cp .env build/.env
-
+  
           pm2 reload klikaja
           
           # Contoh untuk PHP/Laravel (sesuaikan)
