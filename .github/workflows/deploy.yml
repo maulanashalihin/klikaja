@@ -38,9 +38,6 @@ jobs:
           npm install 
   
           pm2 reload klikaja
-          
-          # Contoh untuk PHP/Laravel (sesuaikan)
-          # php artisan migrate --force
-          # php artisan cache:clear
+           
           
           echo "✅ Deployment finished!"
