@@ -245,7 +245,7 @@
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-white dark:bg-gray-800/50 rounded-3xl my-16">
     <div class="text-center mb-12">
       <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-        Kenapa Pilih <span class="text-[#FF6B35]">KlikAja.app</span>?
+        Kenapa Pilih <span class="text-[#FF6B35]">KlikAja</span>?
       </h2>
       <p class="text-gray-600 dark:text-gray-400">
         Fitur lengkap untuk kebutuhan link shortening Anda
