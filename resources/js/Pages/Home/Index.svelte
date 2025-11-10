@@ -43,7 +43,8 @@
     }
   });
   
-  function handleShorten() {
+  function handleShorten(e) {
+    e.preventDefault();
     if (!url) return;
     if (customAlias && aliasAvailable === false) {
       return; // Don't submit if alias is taken
@@ -197,7 +198,7 @@
     <!-- Quick Shorten Widget -->
     <div class="max-w-3xl mx-auto">
       <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 md:p-8 border border-gray-200 dark:border-gray-700">
-        <form on:submit|preventDefault={handleShorten} class="space-y-4">
+        <form onsubmit={handleShorten} class="space-y-4">
           <!-- URL Input -->
           <div>
             <label for="url" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
