@@ -20,7 +20,7 @@
     isCheckingAlias = true;
     
     try {
-      const response = await axios.get(`/api/check-alias/${alias}`);
+      const response = await axios.get(`/api/alias/check/${alias}`);
       aliasAvailable = response.data.available;
     } catch (error) {
       console.error('Error checking alias:', error);

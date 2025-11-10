@@ -63,30 +63,51 @@
 
   let showQRModal = $state(false);
   let qrCodeDataURL = $state('');
+  let isGeneratingQR = $state(false);
 
   async function generateQR() {
+    if (isGeneratingQR) return;
+    
+    isGeneratingQR = true;
+    const url = `https://klikaja.app/${link.alias}`;
+    
     try {
-      const QRCode = (await import('qrcode')).default;
-      const url = `https://klikaja.app/${link.alias}`;
-      qrCodeDataURL = await QRCode.toDataURL(url, {
-        width: 400,
-        margin: 2,
-        color: {
-          dark: '#000000',
-          light: '#FFFFFF'
-        }
+      // Primary: Use QR Server API (zero bundle size)
+      const apiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&format=png&margin=10&data=${encodeURIComponent(url)}`;
+      
+      // Test if image loads successfully
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      
+      await new Promise((resolve, reject) => {
+        img.onload = () => {
+          // Convert to data URL for download support
+          const canvas = document.createElement('canvas');
+          canvas.width = 400;
+          canvas.height = 400;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+          qrCodeDataURL = canvas.toDataURL('image/png');
+          resolve();
+        };
+        img.onerror = reject;
+        img.src = apiUrl;
       });
+      
       showQRModal = true;
     } catch (error) {
+      console.error('QR generation failed:', error);
       Toast('Gagal generate QR code', 'error');
+    } finally {
+      isGeneratingQR = false;
     }
   }
 
   function downloadQR() {
-    const link = document.createElement('a');
-    link.download = `qr-${link.alias}.png`;
-    link.href = qrCodeDataURL;
-    link.click();
+    const downloadLink = document.createElement('a');
+    downloadLink.download = `qr-klikaja-${link.alias}.png`;
+    downloadLink.href = qrCodeDataURL;
+    downloadLink.click();
     Toast('QR Code berhasil didownload!', 'success');
   }
 
@@ -174,9 +195,20 @@
           </button>
           <button
             onclick={generateQR}
-            class="px-4 py-2 bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white rounded-lg hover:shadow-lg transition-all font-medium"
+            disabled={isGeneratingQR}
+            class="px-4 py-2 bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white rounded-lg hover:shadow-lg transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            🎯 QR Code
+            {#if isGeneratingQR}
+              <span class="flex items-center gap-2">
+                <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Generating...
+              </span>
+            {:else}
+              🎯 QR Code
+            {/if}
           </button>
           <button
             onclick={exportCSV}
