@@ -1,14 +1,30 @@
 # 🚀 KlikAja - Smart Link Shortener
 
-> **KlikAja** - Satu klik, semua terhubung. Link yang lebih cerdas, lebih cepat, dan lebih terukur.
+<div align="center">
+  <img src="https://klikaja.app/logo.png" alt="KlikAja Logo" width="200"/>
+  <p><strong>Satu klik, semua terhubung. Link yang lebih cerdas, lebih cepat, dan lebih terukur.</strong></p>
+  
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+  [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org)
+  [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+  [![GitHub Stars](https://img.shields.io/github/stars/yourusername/klikaja?style=social)](https://github.com/yourusername/klikaja)
+  
+  [🌐 Live Demo](https://klikaja.app) • [📖 Documentation](https://docs.klikaja.app) • [🐛 Report Bug](https://github.com/yourusername/klikaja/issues) • [✨ Request Feature](https://github.com/yourusername/klikaja/issues)
+</div>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+---
 
 ## 🎯 Tentang KlikAja
 
-**KlikAja** adalah platform link shortener generasi baru yang menggabungkan kesederhanaan dengan kekuatan analytics mendalam. Dirancang untuk marketer, developer, dan bisnis yang membutuhkan lebih dari sekadar memendekkan URL.
+**KlikAja** adalah platform link shortener **open source** generasi baru yang menggabungkan kesederhanaan dengan kekuatan analytics mendalam. Dirancang untuk marketer, developer, dan bisnis yang membutuhkan lebih dari sekadar memendekkan URL.
+
+### ⭐ Kenapa Open Source?
+
+- **🆓 100% Gratis** - Gunakan, modifikasi, dan deploy tanpa biaya
+- **🔓 Transparan** - Kode sumber terbuka untuk audit dan kontribusi
+- **🚀 Self-Hosted** - Full control atas data dan infrastruktur Anda
+- **🤝 Community-Driven** - Dikembangkan bersama komunitas developer
+- **📈 Terus Berkembang** - Regular updates dan fitur baru
 
 ### 🌟 Mengapa KlikAja?
 
@@ -16,8 +32,29 @@
 - **📊 Analytics Mendalam** - Real-time tracking dengan visualisasi interaktif
 - **🎨 Modern UI/UX** - Interface yang intuitif dengan Svelte 5 & TailwindCSS
 - **🔒 Aman & Reliable** - Password protection, expiration dates, dan link monitoring
-- **🤝 Team Collaboration** - Workspace sharing dengan role-based permissions
-- **🌍 Global Ready** - Geographic tracking dan multi-language support
+- **🔄 URL Rotation** - Sequential, random, atau weighted rotation
+- **🌍 Production Ready** - Siap deploy dengan Docker atau VPS
+
+---
+
+## 📸 Screenshots
+
+<details>
+<summary>Click to view screenshots</summary>
+
+### Homepage
+![Homepage](https://via.placeholder.com/800x400?text=Homepage+Screenshot)
+
+### Dashboard
+![Dashboard](https://via.placeholder.com/800x400?text=Dashboard+Screenshot)
+
+### Analytics
+![Analytics](https://via.placeholder.com/800x400?text=Analytics+Screenshot)
+
+### Link Management
+![Link Management](https://via.placeholder.com/800x400?text=Link+Management+Screenshot)
+
+</details>
 
 ---
 
@@ -169,9 +206,9 @@
 ### Prerequisites
 - Node.js >= 18.0.0
 - npm atau yarn
-- SQLite3
+- SQLite3 (included)
 
-### Quick Start
+### Quick Start (Development)
 
 ```bash
 # Clone repository
@@ -183,13 +220,61 @@ npm install
 
 # Setup environment
 cp .env.example .env
+# Edit .env file dengan konfigurasi Anda
 
 # Run migrations
 npx knex migrate:latest
 
+# Build frontend assets
+npm run build
+
 # Start development server
 npm run dev
 ```
+
+Akses aplikasi di `http://localhost:3000`
+
+### Production Deployment
+
+#### Option 1: Manual VPS Deployment
+
+```bash
+# Di server production
+git clone https://github.com/yourusername/klikaja.git
+cd klikaja
+
+# Install dependencies
+npm install --production
+
+# Setup environment
+cp .env.example .env
+nano .env  # Edit dengan production config
+
+# Run migrations
+NODE_ENV=production npx knex migrate:latest
+
+# Build assets
+npm run build
+
+# Start with PM2
+npm install -g pm2
+pm2 start server.js --name klikaja
+pm2 save
+pm2 startup
+```
+
+#### Option 2: Docker Deployment
+
+```bash
+# Coming soon!
+# docker-compose up -d
+```
+
+#### Option 3: One-Click Deploy
+
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/yourusername/klikaja)
+[![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/klikaja)
+[![Deploy to Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https://github.com/yourusername/klikaja)
 
 ### Environment Variables
 
@@ -362,13 +447,29 @@ klikaja/
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) first.
+Kami sangat welcome kontribusi dari komunitas! Ada banyak cara untuk berkontribusi:
+
+### 🐛 Report Bugs
+Temukan bug? [Buat issue](https://github.com/yourusername/klikaja/issues/new?template=bug_report.md)
+
+### ✨ Request Features
+Punya ide fitur? [Submit feature request](https://github.com/yourusername/klikaja/issues/new?template=feature_request.md)
+
+### 💻 Code Contributions
 
 1. Fork the repository
 2. Create feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit changes (`git commit -m 'Add AmazingFeature'`)
 4. Push to branch (`git push origin feature/AmazingFeature`)
 5. Open Pull Request
+
+### 📖 Documentation
+Bantu improve dokumentasi, tutorial, atau terjemahan
+
+### ⭐ Star & Share
+Beri star di GitHub dan share ke komunitas!
+
+**Baca [Contributing Guide](CONTRIBUTING.md) untuk detail lengkap.**
 
 ---
 
@@ -389,19 +490,82 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📧 Contact & Support
 
+### 🌐 Official Links
 - **Website**: [klikaja.app](https://klikaja.app)
-- **Email**: support@klikaja.app
-- **Twitter**: [@klikajaapp](https://twitter.com/klikajaapp)
-- **Discord**: [Join our community](https://discord.gg/klikaja)
+- **Documentation**: [docs.klikaja.app](https://docs.klikaja.app)
+- **GitHub**: [github.com/yourusername/klikaja](https://github.com/yourusername/klikaja)
+
+### 💬 Community
+- **GitHub Discussions**: [Ask questions & share ideas](https://github.com/yourusername/klikaja/discussions)
+- **GitHub Issues**: [Report bugs & request features](https://github.com/yourusername/klikaja/issues)
+- **Email**: [maulana@drip.id](mailto:maulana@drip.id)
+
+### 🆘 Get Help
+- Check [Documentation](https://docs.klikaja.app)
+- Browse [GitHub Issues](https://github.com/yourusername/klikaja/issues)
+- Ask in [Discussions](https://github.com/yourusername/klikaja/discussions)
+- Email us for urgent matters
+
+### 💖 Support the Project
+Jika KlikAja membantu Anda, pertimbangkan untuk:
+- ⭐ Star repository di GitHub
+- 🐛 Report bugs yang Anda temukan
+- 💻 Contribute code atau dokumentasi
+- 📢 Share ke komunitas Anda
+- ☕ [Buy me a coffee](https://ko-fi.com/yourusername) (optional)
+
+---
+
+---
+
+## 🗺️ Roadmap
+
+### ✅ Phase 1: MVP (COMPLETED - Nov 2025)
+- [x] Link shortening & custom alias
+- [x] URL rotation (Sequential, Random, Weighted)
+- [x] Password protection & expiration
+- [x] Analytics dashboard & QR codes
+- [x] Dark mode & mobile responsive
+- [x] User authentication & profile
+
+### 🔄 Phase 2: Enhanced Features (Dec 2025 - Jan 2026)
+- [ ] Link health monitoring
+- [ ] Real-time analytics (WebSocket)
+- [ ] Team collaboration & workspaces
+- [ ] Custom branded domains
+- [ ] Advanced link scheduling
+
+### 📋 Phase 3: Premium Features (Q1 2026)
+- [ ] API for developers
+- [ ] A/B testing for links
+- [ ] Integrations (Zapier, Slack, etc)
+- [ ] Advanced geo-targeting
+- [ ] White-label solutions
+
+[View full roadmap →](https://github.com/yourusername/klikaja/projects/1)
+
+---
+
+## 📊 Project Stats
+
+![GitHub stars](https://img.shields.io/github/stars/yourusername/klikaja?style=social)
+![GitHub forks](https://img.shields.io/github/forks/yourusername/klikaja?style=social)
+![GitHub issues](https://img.shields.io/github/issues/yourusername/klikaja)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/yourusername/klikaja)
+![GitHub last commit](https://img.shields.io/github/last-commit/yourusername/klikaja)
+![GitHub contributors](https://img.shields.io/github/contributors/yourusername/klikaja)
 
 ---
 
 <div align="center">
-  <p>Made with ❤️ by the KlikAja Team</p>
+  <p><strong>Made with ❤️ by the KlikAja Community</strong></p>
   <p>
-    <a href="https://klikaja.app">Website</a> •
-    <a href="https://docs.klikaja.app">Documentation</a> •
-    <a href="https://github.com/yourusername/klikaja/issues">Report Bug</a> •
-    <a href="https://github.com/yourusername/klikaja/issues">Request Feature</a>
+    <a href="https://klikaja.app">🌐 Website</a> •
+    <a href="https://docs.klikaja.app">📖 Docs</a> •
+    <a href="https://github.com/yourusername/klikaja/issues">🐛 Issues</a> •
+    <a href="https://github.com/yourusername/klikaja/discussions">💬 Discussions</a>
+  </p>
+  <p>
+    <sub>⭐ Star us on GitHub — it motivates us a lot!</sub>
   </p>
 </div>
