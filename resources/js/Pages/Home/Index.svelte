@@ -634,8 +634,7 @@
                   Harga
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/20">
-                  <div class="text-2xl font-bold text-green-600 dark:text-green-400">FREE</div>
-                  <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Forever</div>
+                  <div class="text-2xl font-bold text-green-600 dark:text-green-400">FREE</div> 
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-center">
                   <div class="text-lg font-bold text-gray-900 dark:text-white">$29/mo</div>
