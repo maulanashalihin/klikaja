@@ -20,7 +20,7 @@
 
   async function copyToClipboard(text) {
     try {
-      await navigator.clipboard.writeText(`https://klikaja.com/${text}`);
+      await navigator.clipboard.writeText(`https://klikaja.app/${text}`);
       Toast('Link berhasil disalin!', 'success');
     } catch (error) {
       Toast('Gagal menyalin link', 'error');
@@ -181,7 +181,7 @@
                 <!-- Alias & Status -->
                 <div class="flex items-center gap-3 mb-2">
                   <span class="text-sm font-medium text-gray-600 dark:text-gray-400">
-                    klikaja.com/{link.alias}
+                    klikaja.app/{link.alias}
                   </span>
                   <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold {link.is_active ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400'}">
                     {link.is_active ? '✓ Active' : '✗ Inactive'}

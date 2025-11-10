@@ -50,7 +50,7 @@
 
   async function copyToClipboard() {
     try {
-      await navigator.clipboard.writeText(`https://klikaja.com/${link.alias}`);
+      await navigator.clipboard.writeText(`https://klikaja.app/${link.alias}`);
       Toast('Link berhasil disalin!', 'success');
     } catch (error) {
       Toast('Gagal menyalin link', 'error');
@@ -59,6 +59,35 @@
 
   function exportCSV() {
     window.location.href = `/analytics/${link.alias}/export`;
+  }
+
+  let showQRModal = $state(false);
+  let qrCodeDataURL = $state('');
+
+  async function generateQR() {
+    try {
+      const QRCode = (await import('qrcode')).default;
+      const url = `https://klikaja.app/${link.alias}`;
+      qrCodeDataURL = await QRCode.toDataURL(url, {
+        width: 400,
+        margin: 2,
+        color: {
+          dark: '#000000',
+          light: '#FFFFFF'
+        }
+      });
+      showQRModal = true;
+    } catch (error) {
+      Toast('Gagal generate QR code', 'error');
+    }
+  }
+
+  function downloadQR() {
+    const link = document.createElement('a');
+    link.download = `qr-${link.alias}.png`;
+    link.href = qrCodeDataURL;
+    link.click();
+    Toast('QR Code berhasil didownload!', 'success');
   }
 
   function getDeviceIcon(device) {
@@ -109,7 +138,7 @@
         <div class="flex-1">
           <div class="flex items-center gap-3 mb-2">
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-              klikaja.com/{link.alias}
+              klikaja.app/{link.alias}
             </h1>
             <span class="px-3 py-1 rounded-full text-xs font-semibold {link.is_active ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400'}">
               {link.is_active ? '✓ Active' : '✗ Inactive'}
@@ -142,6 +171,12 @@
             class="px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium"
           >
             📋 Copy Link
+          </button>
+          <button
+            onclick={generateQR}
+            class="px-4 py-2 bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white rounded-lg hover:shadow-lg transition-all font-medium"
+          >
+            🎯 QR Code
           </button>
           <button
             onclick={exportCSV}
@@ -505,3 +540,68 @@
     </div>
   </main>
 </div>
+
+<!-- QR Code Modal -->
+{#if showQRModal}
+  <div 
+    class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" 
+    role="dialog"
+    aria-modal="true"
+    onclick={() => showQRModal = false}
+    onkeydown={(e) => e.key === 'Escape' && (showQRModal = false)}
+  >
+    <div 
+      class="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-md w-full shadow-2xl" 
+      role="document"
+      onclick={(e) => e.stopPropagation()}
+    >
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white">QR Code</h3>
+        <button
+          onclick={() => showQRModal = false}
+          aria-label="Close modal"
+          class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+        >
+          <svg class="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- QR Code Display -->
+      <div class="bg-white p-6 rounded-xl border-2 border-gray-200 dark:border-gray-700 mb-6">
+        <img src={qrCodeDataURL} alt="QR Code" class="w-full h-auto" />
+      </div>
+
+      <!-- Link Info -->
+      <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg">
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Short Link:</p>
+        <p class="text-lg font-semibold text-gray-900 dark:text-white break-all">
+          klikaja.app/{link.alias}
+        </p>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex gap-3">
+        <button
+          onclick={downloadQR}
+          class="flex-1 px-6 py-3 bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white rounded-lg hover:shadow-lg transition-all font-semibold"
+        >
+          📥 Download PNG
+        </button>
+        <button
+          onclick={() => showQRModal = false}
+          class="px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors font-semibold"
+        >
+          Close
+        </button>
+      </div>
+
+      <!-- Tip -->
+      <p class="mt-4 text-xs text-center text-gray-500 dark:text-gray-400">
+        💡 Scan QR code ini untuk langsung mengakses link
+      </p>
+    </div>
+  </div>
+{/if}

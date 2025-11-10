@@ -1,6 +1,8 @@
 <script>
   import { inertia, router } from '@inertiajs/svelte';
   import AppHeader from '../../Components/AppHeader.svelte';
+  import { Toast } from '../../Components/helper.js';
+  import axios from 'axios';
 
   let { user, link, errors = {} } = $props();
 
@@ -33,7 +35,7 @@
   }
 
   // Submit form
-  function handleSubmit() {
+  async function handleSubmit() {
     const formData = {
       urls: rotationMethod === 'weighted' 
         ? urls.map(u => ({ url: u.url, weight: parseInt(u.weight) || 100 }))
@@ -47,7 +49,13 @@
       is_active: isActive
     };
 
-    router.put(`/links/${link.id}`, formData);
+    try {
+      await axios.put(`/links/${link.id}`, formData);
+      Toast('Link berhasil diupdate!', 'success');
+       
+    } catch (error) {
+      Toast(error.response?.data?.message || 'Gagal update link', 'error');
+    }
   }
 </script>
 

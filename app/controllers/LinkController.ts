@@ -349,6 +349,29 @@ class LinkController {
                 return response.status(410).send("Link has reached maximum clicks");
             }
 
+            // Check password protection
+            if (link.password) {
+                const providedPassword = request.query.password || request.body?.password;
+                
+                if (!providedPassword) {
+                    // Redirect to password page
+                    return response.inertia("Links/Password", {
+                        alias: link.alias,
+                        title: link.title
+                    });
+                }
+
+                // Verify password using PBKDF2
+                const isPasswordValid = await Authenticate.compare(providedPassword, link.password);
+                if (!isPasswordValid) {
+                    return response.inertia("Links/Password", {
+                        alias: link.alias,
+                        title: link.title,
+                        error: "Password salah!"
+                    });
+                }
+            }
+
             // Parse URLs
             const urls = JSON.parse(link.urls);
             let destinationUrl = urls[0];
@@ -724,7 +747,7 @@ class LinkController {
                 .where({ id })
                 .update(updateData);
 
-            return response.redirect(`/links?success=Link berhasil diupdate!`);
+            return response.send("OK");
 
         } catch (error) {
             console.error("Error updating link:", error);
