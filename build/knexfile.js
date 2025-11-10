@@ -11,7 +11,7 @@ const config = {
     production: {
         client: "better-sqlite3",
         connection: {
-            filename: "./production.sqlite3"
+            filename: "../../klikaja-db/production.sqlite3"
         },
         useNullAsDefault: true
     },
