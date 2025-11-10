@@ -483,7 +483,7 @@
           </p>
           <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
             <a 
-              href="https://github.com/yourusername/klikaja" 
+              href="https://github.com/maulanashalihin/klikaja" 
               target="_blank"
               rel="noopener noreferrer"
               class="inline-flex items-center justify-center gap-2 bg-white text-gray-900 font-bold px-6 py-3 rounded-lg hover:bg-gray-100 transition-all duration-200 shadow-lg hover:shadow-xl"
@@ -494,7 +494,7 @@
               <span>View on GitHub</span>
             </a>
             <a 
-              href="https://github.com/yourusername/klikaja/blob/main/LICENSE" 
+              href="https://github.com/maulanashalihin/klikaja/blob/main/LICENSE" 
               target="_blank"
               rel="noopener noreferrer"
               class="inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-sm border-2 border-white/20 text-white font-semibold px-6 py-3 rounded-lg hover:bg-white/20 transition-all duration-200"
@@ -564,7 +564,7 @@
         <a href="/register" class="inline-block bg-white text-[#FF6B35] font-bold py-4 px-8 rounded-lg hover:bg-gray-100 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
           Coba Hosted Version
         </a>
-        <a href="https://github.com/yourusername/klikaja#installation" target="_blank" rel="noopener noreferrer" class="inline-block bg-white/10 backdrop-blur-sm border-2 border-white text-white font-bold py-4 px-8 rounded-lg hover:bg-white/20 transition-all duration-200">
+        <a href="https://github.com/maulanashalihin/klikaja#installation" target="_blank" rel="noopener noreferrer" class="inline-block bg-white/10 backdrop-blur-sm border-2 border-white text-white font-bold py-4 px-8 rounded-lg hover:bg-white/20 transition-all duration-200">
           Self-Host Guide
         </a>
       </div>
@@ -584,22 +584,59 @@
         </p>
       </div>
 
-      <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+      <!-- Footer Links -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+        <div>
+          <h3 class="font-semibold text-gray-900 dark:text-white mb-3">Product</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/features" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">Fitur</a></li>
+            <li><a href="/pricing" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">Harga</a></li>
+            <li><a href="https://github.com/maulanashalihin/klikaja#installation" target="_blank" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">Self-Host</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-semibold text-gray-900 dark:text-white mb-3">Company</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/about" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">Tentang</a></li>
+            <li><a href="/contact" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">Kontak</a></li>
+            <li><a href="https://github.com/maulanashalihin/klikaja" target="_blank" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">GitHub</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-semibold text-gray-900 dark:text-white mb-3">Legal</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/privacy" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">Privacy Policy</a></li>
+            <li><a href="/terms" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">Terms of Service</a></li>
+            <li><a href="https://github.com/maulanashalihin/klikaja/blob/main/LICENSE" target="_blank" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">MIT License</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-semibold text-gray-900 dark:text-white mb-3">Resources</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="https://github.com/maulanashalihin/klikaja#readme" target="_blank" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">Documentation</a></li>
+            <li><a href="https://github.com/maulanashalihin/klikaja/issues" target="_blank" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">Report Bug</a></li>
+            <li><a href="https://laju.dev" target="_blank" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">Built with laju.dev</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 border-t border-gray-200 dark:border-gray-700">
         <div class="flex items-center gap-2">
           <KlikAjaLogo size="small" />
           <span class="text-sm text-gray-500 dark:text-gray-400">
-            © 2025 KlikAja. All rights reserved.
+            © 2025 KlikAja. Open Source under MIT License.
           </span>
         </div>
-        <div class="flex gap-6 text-sm">
-          <a href="mailto:maulana@drip.id" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">
-            Kontak
+        <div class="flex gap-4 text-sm">
+          <a href="https://github.com/maulanashalihin/klikaja" target="_blank" rel="noopener" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors" aria-label="GitHub">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
           </a>
-          <a href="https://github.com" target="_blank" rel="noopener" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">
-            GitHub
-          </a>
-          <a href="https://twitter.com" target="_blank" rel="noopener" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">
-            Twitter
+          <a href="mailto:maulana@drip.id" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors" aria-label="Email">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
           </a>
         </div>
       </div>
