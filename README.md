@@ -7,9 +7,14 @@
   [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
   [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org)
   [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
-  [![GitHub Stars](https://img.shields.io/github/stars/yourusername/klikaja?style=social)](https://github.com/yourusername/klikaja)
+  [![GitHub Stars](https://img.shields.io/github/stars/maulanashalihin/klikaja?style=social)](https://github.com/maulanashalihin/klikaja)
+  [![Built in 1 Day](https://img.shields.io/badge/Built%20in-1%20Day-green.svg)](https://laju.dev)
   
-  [🌐 Live Demo](https://klikaja.app) • [📖 Documentation](https://docs.klikaja.app) • [🐛 Report Bug](https://github.com/yourusername/klikaja/issues) • [✨ Request Feature](https://github.com/yourusername/klikaja/issues)
+  [🌐 Live Demo](https://klikaja.app) • [📖 Documentation](https://docs.klikaja.app) • [🐛 Report Bug](https://github.com/maulanashalihin/klikaja/issues) • [✨ Request Feature](https://github.com/maulanashalihin/klikaja/issues)
+  
+  <p>
+    <strong>⚡ Built in just 1 day using <a href="https://laju.dev">laju.dev</a> - Modern fullstack framework</strong>
+  </p>
 </div>
 
 ---
@@ -198,6 +203,48 @@
 - **[ECharts](https://echarts.apache.org/)** - Interactive charts
 - **[Anime.js](https://animejs.com/)** - Smooth animations
 - **[Vite](https://vitejs.dev)** - Lightning-fast build tool
+
+---
+
+## ⚡ Development Speed
+
+KlikAja dibangun dalam **waktu 1 hari** menggunakan [laju.dev](https://laju.dev) - modern fullstack framework yang mempercepat development hingga 10x lipat.
+
+### 🚀 Timeline Pembangunan
+
+**Day 1 (Nov 10, 2025):**
+- ✅ **Hour 1-2**: Database schema & migrations
+- ✅ **Hour 3-4**: Authentication system (register, login, OAuth)
+- ✅ **Hour 5-6**: Link shortening & URL rotation
+- ✅ **Hour 7-8**: Analytics dashboard with charts
+- ✅ **Hour 9-10**: Advanced features (QR code, password protection, expiration)
+- ✅ **Hour 11-12**: UI/UX polish, dark mode, mobile responsive
+- ✅ **Hour 13-14**: Testing, optimization, documentation
+
+**Total**: ~14 hours of focused development = **1 working day** 🎉
+
+### 💡 How is this possible?
+
+**laju.dev** provides:
+- 🏗️ **Pre-configured stack** - Svelte 5 + HyperExpress + SQLite ready to go
+- 🎨 **Modern UI components** - TailwindCSS + pre-built components
+- 🔐 **Auth out of the box** - User management, sessions, OAuth
+- 📊 **Database tools** - Migrations, query builder, ORM
+- ⚡ **Hot reload** - Instant feedback during development
+- 📦 **Production ready** - Optimized build, deployment configs
+
+### 🎯 What you get in 1 day:
+
+```
+✅ Full-featured link shortener
+✅ Advanced analytics dashboard
+✅ User authentication & profiles
+✅ Dark mode & mobile responsive
+✅ Production-ready code
+✅ Open source & documented
+```
+
+**Try laju.dev**: [https://laju.dev](https://laju.dev)
 
 ---
 

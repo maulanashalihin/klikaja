@@ -71,7 +71,7 @@
         <div class="flex-1">
           <div class="flex items-center gap-3 mb-2">
             <h3 class="text-lg font-bold text-gray-900 dark:text-white">
-              klikaja.com/{alias}
+              kliakaja.app/{alias}
             </h3>
             <span class="px-3 py-1 rounded-full text-xs font-semibold {isActive ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400'}">
               {isActive ? '✓ Active' : '✗ Inactive'}
@@ -178,7 +178,7 @@
         <div class="relative">
           <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <span class="text-gray-500 dark:text-gray-400 font-mono text-sm">
-              klikaja.com/
+              kliakaja.app/
             </span>
           </div>
           <input

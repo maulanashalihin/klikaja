@@ -466,7 +466,16 @@
 
       <!-- Tech Stack -->
       <div class="mt-8 pt-8 border-t border-white/20">
-        <p class="text-sm text-gray-400 text-center mb-4">Built with modern technologies:</p>
+        <div class="text-center mb-4">
+          <div class="inline-flex items-center gap-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 px-4 py-2 rounded-full mb-3">
+            <span class="text-2xl">⚡</span>
+            <span class="text-sm font-bold text-green-300">Built in 1 Day!</span>
+          </div>
+          <p class="text-sm text-gray-400">
+            Powered by <a href="https://laju.dev" target="_blank" rel="noopener" class="text-[#00D9FF] hover:underline font-semibold">laju.dev</a> - Modern fullstack framework
+          </p>
+        </div>
+        <p class="text-sm text-gray-400 text-center mb-4 mt-6">with modern technologies:</p>
         <div class="flex flex-wrap justify-center gap-3">
           <span class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg text-sm border border-white/20">Svelte 5</span>
           <span class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg text-sm border border-white/20">HyperExpress</span>
