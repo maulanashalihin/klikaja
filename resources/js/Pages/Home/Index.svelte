@@ -11,6 +11,12 @@
   let debounceTimer;
   let mobileMenuOpen = $state(false);
   
+  // Advanced settings
+  let isAdvancedOpen = $state(false);
+  let password = $state('');
+  let expiresAt = $state('');
+  let maxClicks = $state('');
+  
   // Debounce alias check
   async function checkAliasAvailability(alias) {
     if (!alias || alias.trim() === '') {
@@ -53,7 +59,10 @@
     isLoading = true;
     router.post('/shorten', {
       url: url,
-      alias: customAlias || null
+      alias: customAlias || null,
+      password: password || null,
+      expires_at: expiresAt ? new Date(expiresAt).getTime() : null,
+      max_clicks: maxClicks ? parseInt(maxClicks) : null
     }, {
       onFinish: () => {
         isLoading = false;
@@ -294,6 +303,82 @@
             </div>
           </div>
 
+          <!-- Advanced Options -->
+          <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+            <button
+              type="button"
+              onclick={() => isAdvancedOpen = !isAdvancedOpen}
+              class="w-full flex items-center justify-between text-left px-4 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200"
+            >
+              <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                ⚙️ Advanced Options
+              </span>
+              <svg
+                class="w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform duration-200"
+                class:rotate-180={isAdvancedOpen}
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+
+            {#if isAdvancedOpen}
+              <div class="mt-4 space-y-4 px-4">
+                <!-- Password Protection -->
+                <div>
+                  <label for="password" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    🔒 Password Protection
+                  </label>
+                  <input
+                    bind:value={password}
+                    type="password"
+                    id="password"
+                    placeholder="Kosongkan jika tidak perlu password"
+                    class="w-full bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-4 py-3 focus:border-[#FF6B35] focus:ring-0 focus:outline-none transition-colors duration-150"
+                  />
+                  <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    User harus memasukkan password sebelum redirect
+                  </p>
+                </div>
+
+                <!-- Expiration Date -->
+                <div>
+                  <label for="expiresAt" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    ⏰ Expiration Date
+                  </label>
+                  <input
+                    bind:value={expiresAt}
+                    type="datetime-local"
+                    id="expiresAt"
+                    class="w-full bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-4 py-3 focus:border-[#FF6B35] focus:ring-0 focus:outline-none transition-colors duration-150"
+                  />
+                  <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    Link akan otomatis nonaktif setelah tanggal ini
+                  </p>
+                </div>
+
+                <!-- Max Clicks -->
+                <div>
+                  <label for="maxClicks" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    🎯 Maximum Clicks
+                  </label>
+                  <input
+                    bind:value={maxClicks}
+                    type="number"
+                    id="maxClicks"
+                    min="1"
+                    placeholder="Unlimited"
+                    class="w-full bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-4 py-3 focus:border-[#FF6B35] focus:ring-0 focus:outline-none transition-colors duration-150"
+                  />
+                  <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    Link akan otomatis nonaktif setelah mencapai jumlah klik ini
+                  </p>
+                </div>
+              </div>
+            {/if}
+          </div>
+
           <!-- Submit Button -->
           <button
             type="submit"
@@ -344,6 +429,264 @@
           </p>
         </div>
       {/each}
+    </div>
+  </section>
+
+  <!-- Comparison Section -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        Perbandingan dengan <span class="text-[#FF6B35]">Kompetitor</span>
+      </h2>
+      <p class="text-gray-600 dark:text-gray-400">
+        Lihat kenapa KlikAja adalah pilihan terbaik untuk kebutuhan link shortening Anda
+      </p>
+    </div>
+
+    <!-- Comparison Table -->
+    <div class="overflow-x-auto">
+      <div class="inline-block min-w-full align-middle">
+        <div class="overflow-hidden border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg">
+          <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead class="bg-gradient-to-r from-[#FF6B35] to-[#004E89]">
+              <tr>
+                <th scope="col" class="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">
+                  Fitur
+                </th>
+                <th scope="col" class="px-6 py-4 text-center text-sm font-bold text-white uppercase tracking-wider bg-white/10">
+                  <div class="flex items-center justify-center gap-2">
+                    <span>KlikAja</span>
+                    <span class="text-xl">🚀</span>
+                  </div>
+                </th>
+                <th scope="col" class="px-6 py-4 text-center text-sm font-bold text-white uppercase tracking-wider">
+                  Bitly
+                </th>
+                <th scope="col" class="px-6 py-4 text-center text-sm font-bold text-white uppercase tracking-wider">
+                  TinyURL
+                </th>
+                <th scope="col" class="px-6 py-4 text-center text-sm font-bold text-white uppercase tracking-wider">
+                  Short.io
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+              <!-- No Login Required -->
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                  Tanpa Login
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/20">
+                  <span class="text-2xl">✅</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-2xl">❌</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-2xl">✅</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-2xl">❌</span>
+                </td>
+              </tr>
+
+              <!-- Custom Alias -->
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                  Custom Alias Gratis
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/20">
+                  <span class="text-2xl">✅</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-sm text-gray-500 dark:text-gray-400">💰 Paid</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-2xl">❌</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-sm text-gray-500 dark:text-gray-400">💰 Paid</span>
+                </td>
+              </tr>
+
+              <!-- Link Rotation -->
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
+                  <div>Link Rotation</div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Sequential, Random, Weighted</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/20">
+                  <span class="text-2xl">✅</span>
+                  <div class="text-xs text-green-600 dark:text-green-400 font-semibold mt-1">3 Methods</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-2xl">❌</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-2xl">❌</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-sm text-gray-500 dark:text-gray-400">💰 Paid</span>
+                </td>
+              </tr>
+
+              <!-- Analytics -->
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
+                  <div>Analytics Dashboard</div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Geo, Device, Browser, OS</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/20">
+                  <span class="text-2xl">✅</span>
+                  <div class="text-xs text-green-600 dark:text-green-400 font-semibold mt-1">Unlimited</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-sm text-gray-500 dark:text-gray-400">💰 Limited</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-2xl">❌</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-sm text-gray-500 dark:text-gray-400">💰 Paid</span>
+                </td>
+              </tr>
+
+              <!-- Password Protection -->
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                  Password Protection
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/20">
+                  <span class="text-2xl">✅</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-sm text-gray-500 dark:text-gray-400">💰 Paid</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-2xl">❌</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-sm text-gray-500 dark:text-gray-400">💰 Paid</span>
+                </td>
+              </tr>
+
+              <!-- QR Code -->
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                  Auto QR Code
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/20">
+                  <span class="text-2xl">✅</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-sm text-gray-500 dark:text-gray-400">💰 Paid</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-2xl">✅</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-2xl">✅</span>
+                </td>
+              </tr>
+
+              <!-- Open Source -->
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                  Open Source & Self-Host
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/20">
+                  <span class="text-2xl">✅</span>
+                  <div class="text-xs text-green-600 dark:text-green-400 font-semibold mt-1">MIT License</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-2xl">❌</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-2xl">❌</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-2xl">❌</span>
+                </td>
+              </tr>
+
+              <!-- Link Expiration -->
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                  Link Expiration & Click Limit
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/20">
+                  <span class="text-2xl">✅</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-sm text-gray-500 dark:text-gray-400">💰 Paid</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-2xl">❌</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <span class="text-sm text-gray-500 dark:text-gray-400">💰 Paid</span>
+                </td>
+              </tr>
+
+              <!-- Price -->
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors border-t-2 border-[#FF6B35]/30">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">
+                  Harga
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/20">
+                  <div class="text-2xl font-bold text-green-600 dark:text-green-400">FREE</div>
+                  <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Forever</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <div class="text-lg font-bold text-gray-900 dark:text-white">$29/mo</div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Pro Plan</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <div class="text-lg font-bold text-gray-900 dark:text-white">$9.99/mo</div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Premium</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center">
+                  <div class="text-lg font-bold text-gray-900 dark:text-white">$20/mo</div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Starter</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Advantages -->
+    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-6 rounded-2xl border-2 border-green-500/30 dark:border-green-600/30">
+        <div class="text-3xl mb-3">💰</div>
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">
+          100% Gratis Selamanya
+        </h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">
+          Semua fitur premium tanpa biaya bulanan. Kompetitor charge $9-$29/bulan untuk fitur yang sama!
+        </p>
+      </div>
+
+      <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-6 rounded-2xl border-2 border-blue-500/30 dark:border-blue-600/30">
+        <div class="text-3xl mb-3">🔓</div>
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">
+          Open Source & Transparan
+        </h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">
+          Kode terbuka, dapat diaudit, dan self-host unlimited. Kompetitor closed-source dengan vendor lock-in!
+        </p>
+      </div>
+
+      <div class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-6 rounded-2xl border-2 border-purple-500/30 dark:border-purple-600/30">
+        <div class="text-3xl mb-3">⚡</div>
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">
+          Fitur Unik: Link Rotation
+        </h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400">
+          3 metode rotation untuk A/B testing & load balancing. Fitur ini tidak ada di kompetitor atau berbayar!
+        </p>
+      </div>
     </div>
   </section>
 
@@ -673,3 +1016,9 @@
     </div>
   </footer>
 </div>
+
+<style>
+  .rotate-180 {
+    transform: rotate(180deg);
+  }
+</style>

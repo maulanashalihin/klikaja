@@ -558,7 +558,8 @@ class LinkController {
                 rotation_method = 'random',
                 password,
                 expires_at,
-                max_clicks
+                max_clicks,
+                folder_id
             } = await request.json();
 
             // Validate URLs
@@ -620,6 +621,7 @@ class LinkController {
             await DB.table("links").insert({
                 id: linkId,
                 user_id: user.id,
+                folder_id: folder_id || null,
                 alias: finalAlias,
                 urls: JSON.stringify(urls),
                 rotation_method,
@@ -638,8 +640,12 @@ class LinkController {
                 updated_at: now
             });
 
-            // Redirect to link details or links list
-            return response.redirect(`/home?success=Link berhasil dibuat!`);
+            // Return link data for tag attachment
+            return response.json({
+                success: true,
+                message: 'Link berhasil dibuat!',
+                data: { id: linkId, alias: finalAlias }
+            });
 
         } catch (error) {
             console.error("Error creating link:", error);
@@ -704,7 +710,8 @@ class LinkController {
                 password,
                 expires_at,
                 max_clicks,
-                is_active = true
+                is_active = true,
+                folder_id
             } = body;
 
             // Validate URLs
@@ -734,6 +741,7 @@ class LinkController {
                 expires_at: expires_at || null,
                 max_clicks: max_clicks || null,
                 is_active: is_active ? 1 : 0,
+                folder_id: folder_id !== undefined ? folder_id : link.folder_id,
                 updated_at: Date.now()
             };
 

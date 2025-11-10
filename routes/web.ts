@@ -4,6 +4,8 @@ import HomeController from "../app/controllers/HomeController";
 import LinkController from "../app/controllers/LinkController";
 import AnalyticsController from "../app/controllers/AnalyticsController";
 import SettingsController from "../app/controllers/SettingsController";
+import FolderController from "../app/controllers/FolderController";
+import TagController from "../app/controllers/TagController";
 import AssetController from "../app/controllers/AssetController";
 import S3Controller from "../app/controllers/S3Controller";
 import HyperExpress from 'hyper-express';
@@ -105,6 +107,44 @@ Route.get("/analytics/:alias/export", [Auth], AnalyticsController.export);
 Route.get("/settings", [Auth], SettingsController.index);
 Route.get("/api/settings", [Auth], SettingsController.get);
 Route.post("/api/settings", [Auth], SettingsController.store);
+
+/**
+ * Folders Routes (Authenticated)
+ * Phase 2: Enhanced Features - Folders & Tags Organization
+ * ------------------------------------------------
+ * GET    /api/folders - List all user's folders
+ * POST   /api/folders - Create new folder
+ * PUT    /api/folders/:id - Update folder
+ * DELETE /api/folders/:id - Delete folder
+ * POST   /api/folders/:id/move-links - Move links to folder
+ * POST   /api/folders/reorder - Reorder folders
+ */
+Route.get("/api/folders", [Auth], FolderController.index);
+Route.post("/api/folders", [Auth], FolderController.store);
+Route.put("/api/folders/:id", [Auth], FolderController.update);
+Route.delete("/api/folders/:id", [Auth], FolderController.destroy);
+Route.post("/api/folders/:id/move-links", [Auth], FolderController.moveLinks);
+Route.post("/api/folders/reorder", [Auth], FolderController.reorder);
+
+/**
+ * Tags Routes (Authenticated)
+ * Phase 2: Enhanced Features - Folders & Tags Organization
+ * ------------------------------------------------
+ * GET    /api/tags - List all user's tags
+ * POST   /api/tags - Create new tag
+ * PUT    /api/tags/:id - Update tag
+ * DELETE /api/tags/:id - Delete tag
+ * GET    /api/links/:linkId/tags - Get tags for a link
+ * POST   /api/links/:linkId/tags - Attach tags to link
+ * DELETE /api/links/:linkId/tags - Detach tags from link
+ */
+Route.get("/api/tags", [Auth], TagController.index);
+Route.post("/api/tags", [Auth], TagController.store);
+Route.put("/api/tags/:id", [Auth], TagController.update);
+Route.delete("/api/tags/:id", [Auth], TagController.destroy);
+Route.get("/api/links/:linkId/tags", [Auth], TagController.getForLink);
+Route.post("/api/links/:linkId/tags", [Auth], TagController.attachToLink);
+Route.delete("/api/links/:linkId/tags", [Auth], TagController.detachFromLink);
 
 /**
  * S3 Routes

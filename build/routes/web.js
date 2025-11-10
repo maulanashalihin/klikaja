@@ -9,6 +9,8 @@ const HomeController_1 = __importDefault(require("../app/controllers/HomeControl
 const LinkController_1 = __importDefault(require("../app/controllers/LinkController"));
 const AnalyticsController_1 = __importDefault(require("../app/controllers/AnalyticsController"));
 const SettingsController_1 = __importDefault(require("../app/controllers/SettingsController"));
+const FolderController_1 = __importDefault(require("../app/controllers/FolderController"));
+const TagController_1 = __importDefault(require("../app/controllers/TagController"));
 const AssetController_1 = __importDefault(require("../app/controllers/AssetController"));
 const S3Controller_1 = __importDefault(require("../app/controllers/S3Controller"));
 const hyper_express_1 = __importDefault(require("hyper-express"));
@@ -40,6 +42,19 @@ Route.get("/analytics/:alias/export", [auth_1.default], AnalyticsController_1.de
 Route.get("/settings", [auth_1.default], SettingsController_1.default.index);
 Route.get("/api/settings", [auth_1.default], SettingsController_1.default.get);
 Route.post("/api/settings", [auth_1.default], SettingsController_1.default.store);
+Route.get("/api/folders", [auth_1.default], FolderController_1.default.index);
+Route.post("/api/folders", [auth_1.default], FolderController_1.default.store);
+Route.put("/api/folders/:id", [auth_1.default], FolderController_1.default.update);
+Route.delete("/api/folders/:id", [auth_1.default], FolderController_1.default.destroy);
+Route.post("/api/folders/:id/move-links", [auth_1.default], FolderController_1.default.moveLinks);
+Route.post("/api/folders/reorder", [auth_1.default], FolderController_1.default.reorder);
+Route.get("/api/tags", [auth_1.default], TagController_1.default.index);
+Route.post("/api/tags", [auth_1.default], TagController_1.default.store);
+Route.put("/api/tags/:id", [auth_1.default], TagController_1.default.update);
+Route.delete("/api/tags/:id", [auth_1.default], TagController_1.default.destroy);
+Route.get("/api/links/:linkId/tags", [auth_1.default], TagController_1.default.getForLink);
+Route.post("/api/links/:linkId/tags", [auth_1.default], TagController_1.default.attachToLink);
+Route.delete("/api/links/:linkId/tags", [auth_1.default], TagController_1.default.detachFromLink);
 Route.post("/api/s3/signed-url", [auth_1.default], S3Controller_1.default.getSignedUrl);
 Route.get("/api/s3/public-url/:fileKey", S3Controller_1.default.getPublicUrl);
 Route.get("/api/s3/health", S3Controller_1.default.health);

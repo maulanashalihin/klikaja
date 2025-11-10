@@ -1,6 +1,9 @@
 <script>
   import { inertia, router } from '@inertiajs/svelte';
+  import { onMount } from 'svelte';
   import AppHeader from '../../Components/AppHeader.svelte';
+  import TagSelector from '../../Components/TagSelector.svelte';
+  import axios from 'axios';
 
   let { user, errors = {} } = $props();
 
@@ -13,9 +16,26 @@
   let password = $state('');
   let expiresAt = $state('');
   let maxClicks = $state('');
+  let folderId = $state(null);
+  let selectedTags = $state([]);
   let isAdvancedOpen = $state(false);
   let aliasAvailable = $state(null);
   let checkingAlias = $state(false);
+  
+  // Folders
+  let folders = $state([]);
+  let loadingFolders = $state(true);
+  
+  onMount(async () => {
+    try {
+      const response = await axios.get('/api/folders');
+      folders = response.data.data || [];
+    } catch (error) {
+      console.error('Error loading folders:', error);
+    } finally {
+      loadingFolders = false;
+    }
+  });
 
   // Add URL field
   function addUrl() {
@@ -65,21 +85,39 @@
   }
 
   // Submit form
-  function handleSubmit() {
-    const formData = {
-      urls: rotationMethod === 'weighted' 
-        ? urls.map(u => ({ url: u.url, weight: parseInt(u.weight) || 100 }))
-        : urls.map(u => u.url),
-      alias: alias || undefined,
-      title: title || undefined,
-      description: description || undefined,
-      rotation_method: rotationMethod,
-      password: password || undefined,
-      expires_at: expiresAt ? new Date(expiresAt).getTime() : undefined,
-      max_clicks: maxClicks ? parseInt(maxClicks) : undefined
-    };
+  async function handleSubmit() {
+    try {
+      const formData = {
+        urls: rotationMethod === 'weighted' 
+          ? urls.map(u => ({ url: u.url, weight: parseInt(u.weight) || 100 }))
+          : urls.map(u => u.url),
+        alias: alias || undefined,
+        title: title || undefined,
+        description: description || undefined,
+        rotation_method: rotationMethod,
+        password: password || undefined,
+        expires_at: expiresAt ? new Date(expiresAt).getTime() : undefined,
+        max_clicks: maxClicks ? parseInt(maxClicks) : undefined,
+        folder_id: folderId || undefined
+      };
 
-    router.post('/links', formData);
+      // Create link
+      const response = await axios.post('/links', formData);
+      const linkId = response.data?.data?.id;
+      
+      // Attach tags if any
+      if (linkId && selectedTags.length > 0) {
+        await axios.post(`/api/links/${linkId}/tags`, {
+          tag_ids: selectedTags.map(t => t.id)
+        });
+      }
+      
+      // Redirect to links page
+      router.visit('/home?success=Link berhasil dibuat!');
+    } catch (error) {
+      console.error('Error creating link:', error);
+      alert(error.response?.data?.error || 'Failed to create link');
+    }
   }
 
   // Watch alias changes
@@ -266,6 +304,41 @@
               class="w-full px-4 py-3 bg-gray-50 focus:outline-none dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 resize-none"
             ></textarea>
           </div>
+        </div>
+      </div>
+
+      <!-- Organization Section -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
+          Organization (Optional)
+        </h2>
+
+        <div class="space-y-4">
+          <!-- Folder Selector -->
+          <div>
+            <label for="folder" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Folder
+            </label>
+            {#if loadingFolders}
+              <div class="text-sm text-gray-500 dark:text-gray-400">Loading folders...</div>
+            {:else}
+              <select
+                id="folder"
+                bind:value={folderId}
+                class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent text-gray-900 dark:text-white"
+              >
+                <option value={null}>No Folder</option>
+                {#each folders as folder}
+                  <option value={folder.id}>
+                    {folder.icon || '📁'} {folder.name}
+                  </option>
+                {/each}
+              </select>
+            {/if}
+          </div>
+
+          <!-- Tags Selector -->
+          <TagSelector bind:selectedTags={selectedTags} />
         </div>
       </div>
 

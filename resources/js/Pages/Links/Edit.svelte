@@ -1,6 +1,8 @@
 <script>
   import { inertia, router } from '@inertiajs/svelte';
+  import { onMount } from 'svelte';
   import AppHeader from '../../Components/AppHeader.svelte';
+  import TagSelector from '../../Components/TagSelector.svelte';
   import { Toast } from '../../Components/helper.js';
   import axios from 'axios';
 
@@ -19,8 +21,25 @@
   let password = $state('');
   let expiresAt = $state(link.expires_at ? new Date(link.expires_at).toISOString().slice(0, 16) : '');
   let maxClicks = $state(link.max_clicks || '');
+  let folderId = $state(link.folder_id);
+  let selectedTags = $state([]);
   let isAdvancedOpen = $state(false);
   let isActive = $state(link.is_active);
+  
+  // Folders
+  let folders = $state([]);
+  let loadingFolders = $state(true);
+  
+  onMount(async () => {
+    try {
+      const response = await axios.get('/api/folders');
+      folders = response.data.data || [];
+    } catch (error) {
+      console.error('Error loading folders:', error);
+    } finally {
+      loadingFolders = false;
+    }
+  });
 
   // Add URL field
   function addUrl() {
@@ -46,11 +65,39 @@
       password: password || undefined,
       expires_at: expiresAt ? new Date(expiresAt).getTime() : undefined,
       max_clicks: maxClicks ? parseInt(maxClicks) : undefined,
-      is_active: isActive
+      is_active: isActive,
+      folder_id: folderId
     };
 
     try {
+      // Update link
       await axios.put(`/links/${link.id}`, formData);
+      
+      // Get current tags
+      const currentTagsResponse = await axios.get(`/api/links/${link.id}/tags`);
+      const currentTags = currentTagsResponse.data.data || [];
+      
+      // Find tags to attach and detach
+      const currentTagIds = currentTags.map(t => t.id);
+      const selectedTagIds = selectedTags.map(t => t.id);
+      
+      const toAttach = selectedTagIds.filter(id => !currentTagIds.includes(id));
+      const toDetach = currentTagIds.filter(id => !selectedTagIds.includes(id));
+      
+      // Attach new tags
+      if (toAttach.length > 0) {
+        await axios.post(`/api/links/${link.id}/tags`, {
+          tag_ids: toAttach
+        });
+      }
+      
+      // Detach removed tags
+      if (toDetach.length > 0) {
+        await axios.delete(`/api/links/${link.id}/tags`, {
+          data: { tag_ids: toDetach }
+        });
+      }
+      
       Toast('Link berhasil diupdate!', 'success');
        
     } catch (error) {
@@ -225,6 +272,44 @@
               class="w-full px-4 py-3 bg-gray-50 focus:outline-none dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 resize-none"
             ></textarea>
           </div>
+        </div>
+      </div>
+
+      <!-- Organization Section -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
+          Organization (Optional)
+        </h2>
+
+        <div class="space-y-4">
+          <!-- Folder Selector -->
+          <div>
+            <label for="folder" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Folder
+            </label>
+            {#if loadingFolders}
+              <div class="text-sm text-gray-500 dark:text-gray-400">Loading folders...</div>
+            {:else}
+              <select
+                id="folder"
+                bind:value={folderId}
+                class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent text-gray-900 dark:text-white"
+              >
+                <option value={null}>No Folder</option>
+                {#each folders as folder}
+                  <option value={folder.id}>
+                    {folder.icon || '📁'} {folder.name}
+                  </option>
+                {/each}
+              </select>
+            {/if}
+          </div>
+
+          <!-- Tags Selector (will auto-load existing tags) -->
+          <TagSelector 
+            bind:selectedTags={selectedTags}
+            linkId={link.id}
+          />
         </div>
       </div>
 

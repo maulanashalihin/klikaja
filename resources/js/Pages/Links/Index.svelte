@@ -1,6 +1,7 @@
 <script>
   import { inertia, router } from '@inertiajs/svelte';
   import AppHeader from '../../Components/AppHeader.svelte';
+  import FolderSidebar from '../../Components/FolderSidebar.svelte';
   import { Toast } from '../../Components/helper.js';
   import axios from 'axios';
 
@@ -8,6 +9,9 @@
 
   let searchQuery = $state(filters.search || '');
   let statusFilter = $state(filters.status || 'all');
+  let selectedFolder = $state(null);
+  let filteredLinks = $state(links);
+  let showMobileFolders = $state(false);
 
   function formatDate(timestamp) {
     const date = new Date(timestamp);
@@ -67,12 +71,94 @@
     if (statusFilter !== 'all') params.set('status', statusFilter);
     router.get(`/links?${params.toString()}`);
   }
+
+  function handleFolderChange(folder) {
+    selectedFolder = folder;
+    if (folder === null) {
+      // Show all links
+      filteredLinks = links;
+    } else {
+      // Filter by folder
+      filteredLinks = links.filter(link => link.folder_id === folder.id);
+    }
+  }
+
+  // Update filtered links when links prop changes
+  $effect(() => {
+    if (selectedFolder === null) {
+      filteredLinks = links;
+    } else {
+      filteredLinks = links.filter(link => link.folder_id === selectedFolder.id);
+    }
+  });
 </script>
 
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
   <AppHeader {user} currentPage="links" />
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Mobile Folder Toggle Button -->
+    <button
+      onclick={() => showMobileFolders = true}
+      class="lg:hidden mb-4 flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+      </svg>
+      <span class="font-medium">
+        {selectedFolder ? selectedFolder.name : 'All Links'}
+      </span>
+      <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </svg>
+    </button>
+
+    <!-- Mobile Folder Drawer -->
+    {#if showMobileFolders}
+      <div 
+        class="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+        onclick={() => showMobileFolders = false}
+      >
+        <div 
+          class="absolute left-0 top-0 bottom-0 w-80 max-w-[85vw] bg-gray-50 dark:bg-gray-900 shadow-xl overflow-y-auto"
+          onclick={(e) => e.stopPropagation()}
+        >
+          <div class="p-4">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-lg font-bold text-gray-900 dark:text-white">Folders</h2>
+              <button
+                onclick={() => showMobileFolders = false}
+                class="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                aria-label="Close folders"
+              >
+                <svg class="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <FolderSidebar 
+              bind:selectedFolder={selectedFolder}
+              onFolderChange={(folder) => {
+                handleFolderChange(folder);
+                showMobileFolders = false;
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    {/if}
+
+    <div class="flex gap-6">
+      <!-- Desktop Folder Sidebar -->
+      <aside class="hidden lg:block w-64 flex-shrink-0">
+        <FolderSidebar 
+          bind:selectedFolder={selectedFolder}
+          onFolderChange={handleFolderChange}
+        />
+      </aside>
+
+      <!-- Main Content -->
+      <div class="flex-1 min-w-0">
     <!-- Header Section -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
       <div>
@@ -133,14 +219,17 @@
       <!-- Stats Summary -->
       <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
         <p class="text-sm text-gray-600 dark:text-gray-400">
-          Menampilkan <span class="font-semibold text-gray-900 dark:text-white">{links.length}</span> dari 
+          Menampilkan <span class="font-semibold text-gray-900 dark:text-white">{filteredLinks.length}</span> dari 
           <span class="font-semibold text-gray-900 dark:text-white">{pagination.total}</span> links
+          {#if selectedFolder}
+            <span class="text-[#FF6B35]">in {selectedFolder.name}</span>
+          {/if}
         </p>
       </div>
     </div>
 
     <!-- Links List -->
-    {#if links.length === 0}
+    {#if filteredLinks.length === 0}
       <!-- Empty State -->
       <div class="bg-white dark:bg-gray-800 rounded-xl p-12 shadow-sm border border-gray-200 dark:border-gray-700 text-center">
         <svg class="w-16 h-16 mx-auto text-gray-400 dark:text-gray-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -166,7 +255,7 @@
     {:else}
       <!-- Links Grid -->
       <div class="space-y-4">
-        {#each links as link}
+        {#each filteredLinks as link}
           <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow duration-200">
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
               <!-- Link Info -->
@@ -323,5 +412,9 @@
         </div>
       {/if}
     {/if}
+      </div>
+      <!-- End Main Content -->
+    </div>
+    <!-- End Flex Container -->
   </main>
 </div>

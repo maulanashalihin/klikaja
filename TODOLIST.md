@@ -1,13 +1,44 @@
 # 📋 KlikAja - Development TODO List
 
 > **Project**: KlikAja - Smart Link Shortener  
-> **Last Updated**: Nov 10, 2025 - 4:57 PM  
-> **Status**: 🎉 MVP COMPLETE - Week 1 Day 1  
-> **Current Progress**: 50/111 tasks (45.0%)
+> **Last Updated**: Nov 11, 2025 - 12:56 AM  
+> **Status**: 🎉 MVP COMPLETE + Phase 2 Folders & Tags COMPLETE!  
+> **Current Progress**: 58/111 tasks (52.3%)
 
 ---
 
 ## 📅 Recent Updates
+
+### Nov 11, 2025 - Late Night Session (12:44 AM - 12:56 AM)
+- ✅ **Phase 2: Folders & Tags COMPLETE!** 🎉
+  - Database migrations (4 tables):
+    - folders table (user folders with color & icon)
+    - tags table (user-specific tags with slug)
+    - link_tags pivot table (many-to-many)
+    - folder_id column in links table
+  - Backend controllers:
+    - FolderController.ts (6 methods: index, store, update, destroy, moveLinks, reorder)
+    - TagController.ts (7 methods: index, store, update, destroy, getForLink, attachToLink, detachFromLink)
+    - LinkController.ts updated (folder_id support in store & update)
+  - Frontend components:
+    - FolderSidebar.svelte (list, create, filter by folder)
+    - TagSelector.svelte (multi-select, create tags)
+  - Pages integration:
+    - Links/Index.svelte (folder sidebar + filtering)
+    - Links/Create.svelte (folder dropdown + tag selector)
+    - Links/Edit.svelte (folder dropdown + tag selector with auto-load)
+  - Mobile responsiveness:
+    - Slide-in folder drawer for mobile (< 1024px)
+    - Bottom sheet tag selector on mobile
+    - Full-screen modals on mobile
+    - 48px+ touch targets (WCAG 2.1)
+    - Optimized spacing and typography
+  - API routes (13 new endpoints):
+    - 6 folder routes (/api/folders/*)
+    - 7 tag routes (/api/tags/*, /api/links/:linkId/tags)
+  - Documentation:
+    - FOLDERS-TAGS-USAGE.md (complete usage guide)
+    - MOBILE-RESPONSIVE-GUIDE.md (testing & optimization guide)
 
 ### Nov 10, 2025 - Morning Session
 - ✅ **Database Migrations Complete** (4/4 MVP migrations)
@@ -53,14 +84,38 @@
     - toggle() method (active/inactive status)
     - Only generateQR() remaining!
   - HomeController (updated to Inertia)
-  - SettingsController (3/3 methods - 100%) ✅ NEW!
-    - index() - Render settings page with saved settings
-    - get() - API endpoint to fetch settings
-    - store() - Save settings to database as JSON
-- ✅ **Routes Configuration**
-  - All CRUD routes for links added
-  - Routing conflicts resolved (/, /home, /links)
-  - Settings routes added (GET /settings, GET/POST /api/settings)
+  - [x] **SettingsController.ts** 🔥 MVP ✅ COMPLETED
+  - [x] index() - Render settings page with saved settings
+  - [x] get() - API endpoint to fetch settings
+  - [x] store() - Save settings to database as JSON
+  - Priority: HIGH
+  - Status: ✅ Completed (Nov 10, 2025)
+
+### 🚀 Phase 2 Controllers (Enhanced Features)
+
+- [x] **FolderController.ts** 🚀 Phase 2 ✅ COMPLETED
+  - [x] index() - List all folders with link count
+  - [x] store() - Create new folder
+  - [x] update() - Update folder (name, color, icon, description)
+  - [x] destroy() - Delete folder (moves links to null)
+  - [x] moveLinks() - Move multiple links to folder
+  - [x] reorder() - Reorder folders by position
+  - Priority: MEDIUM
+  - Status: ✅ Completed (Nov 11, 2025)
+  - Features: User-specific folders, color coding, emoji icons, drag & drop ordering
+
+- [x] **TagController.ts** 🚀 Phase 2 ✅ COMPLETED
+  - [x] index() - List all tags with links_count
+  - [x] store() - Create new tag (auto-generate slug)
+  - [x] update() - Update tag (name, color, description)
+  - [x] destroy() - Delete tag (removes all associations)
+  - [x] getForLink() - Get tags for specific link
+  - [x] attachToLink() - Attach multiple tags to link
+  - [x] detachFromLink() - Detach tags from link
+  - Priority: MEDIUM
+  - Status: ✅ Completed (Nov 11, 2025)
+  - Features: User-specific tags, slug generation, many-to-many relationships
+
 - ✅ **Components Created**
   - KlikAjaLogo component
   - UserProfileMenu component (with dropdown)
@@ -126,6 +181,8 @@
   - MVP-PRIORITY.md
   - AUTH-PAGES-SUMMARY.md
   - INPUT-FIX.md
+  - FOLDERS-TAGS-USAGE.md ✅ NEW!
+  - MOBILE-RESPONSIVE-GUIDE.md ✅ NEW!
 
 ---
 
@@ -296,12 +353,12 @@
 
 #### 🚀 Phase 2: Enhanced Features (Weeks 5-8)
 **Goal**: Differentiating features
-- **Database Migrations**: 0/4 completed (0%)
-- **Backend Controllers**: 0/2 completed (0%)
-- **Frontend Pages**: 0/4 completed (0%)
-- **Components**: 0/5 completed (0%)
+- **Database Migrations**: 4/8 completed (50%) ✅ (+Folders & Tags)
+- **Backend Controllers**: 2/4 completed (50%) ✅ (+FolderController, TagController)
+- **Frontend Pages**: 3/4 completed (75%) 🚧 (+Links pages integration)
+- **Components**: 2/5 completed (40%) 🚧 (+FolderSidebar, TagSelector)
 - **Services & Utilities**: 0/6 completed (0%)
-- **Phase 2 Progress**: 0/21 tasks (0%)
+- **Phase 2 Progress**: 11/27 tasks (40.7%) 🚀
 
 #### ⚡ Phase 3: Advanced Features (Weeks 9-12)
 **Goal**: Premium competitive edge
@@ -309,7 +366,10 @@
 - **Integrations**: 0/5 tasks (0%)
 - **Phase 3 Progress**: 0/42 tasks (0%)
 
-### 📈 Total Progress: 50/111 tasks (45.0%) 🚀
+### 📈 Total Progress: 58/111 tasks (52.3%) 🚀
+**Phase 1 (MVP)**: 47/48 tasks (97.9%) ✅
+**Phase 2 (Enhanced)**: 11/27 tasks (40.7%) 🚀
+**Phase 3 (Advanced)**: 0/36 tasks (0%)
 
 ---
 
@@ -343,6 +403,50 @@
 - ✅ Early access notice
 - ✅ Optimized bundle (-30KB)
 - ✅ Loading states
+
+### 🚀 Production Ready!
+
+---
+
+## 🎉 PHASE 2 MILESTONE - Folders & Tags COMPLETE!
+
+### ✅ What's Complete (Nov 11, 2025):
+
+**Database (100%)**
+- ✅ 4 new migrations (folders, tags, link_tags, folder_id in links)
+- ✅ User-specific folders with color & icon
+- ✅ User-specific tags with slug generation
+- ✅ Many-to-many link-tag relationships
+- ✅ Folder organization for links
+
+**Backend (100%)**
+- ✅ FolderController (6 methods)
+- ✅ TagController (7 methods)
+- ✅ LinkController updated (folder_id support)
+- ✅ 13 new API routes
+
+**Frontend (100%)**
+- ✅ FolderSidebar component
+- ✅ TagSelector component
+- ✅ Links/Index integration (folder filtering)
+- ✅ Links/Create integration (folder + tags)
+- ✅ Links/Edit integration (folder + tags with auto-load)
+
+**Mobile Responsive (100%)**
+- ✅ Slide-in folder drawer (< 1024px)
+- ✅ Bottom sheet tag selector
+- ✅ Full-screen modals on mobile
+- ✅ 48px+ touch targets (WCAG 2.1)
+- ✅ Optimized spacing & typography
+- ✅ Smooth animations (GPU accelerated)
+
+**Documentation (100%)**
+- ✅ FOLDERS-TAGS-USAGE.md (complete usage guide)
+- ✅ MOBILE-RESPONSIVE-GUIDE.md (testing & optimization)
+
+**Status**: 🎉 **FOLDERS & TAGS READY FOR TESTING!**
+
+---
 
 ### 🚀 Production Ready!
 
@@ -501,30 +605,45 @@
 
 ### 🚀 Phase 2 Migrations (Enhanced Features)
 
-- [ ] **004_create_folders_table.ts** 🚀 Phase 2
-  - id (primary key)
+- [x] **20251111000001_create_folders_table.ts** 🚀 Phase 2 ✅
+  - id (primary key, UUID)
   - user_id (foreign key)
-  - name
-  - color (hex color)
-  - icon (nullable)
+  - name (varchar 255)
+  - color (varchar 7, hex color)
+  - icon (varchar 10, emoji)
+  - description (text, nullable)
+  - position (integer, for ordering)
   - created_at, updated_at
   - Priority: MEDIUM
-  - Status: ⏳ Pending
+  - Status: ✅ Completed (Nov 11, 2025)
 
-- [ ] **005_create_tags_table.ts** 🚀 Phase 2
-  - id (primary key)
-  - name (unique)
-  - color (hex color)
+- [x] **20251111000002_create_tags_table.ts** 🚀 Phase 2 ✅
+  - id (primary key, UUID)
+  - user_id (foreign key)
+  - name (varchar 100)
+  - slug (varchar 100, unique per user)
+  - color (varchar 7, hex color)
+  - description (text, nullable)
+  - links_count (integer, default 0)
   - created_at, updated_at
   - Priority: MEDIUM
-  - Status: ⏳ Pending
+  - Status: ✅ Completed (Nov 11, 2025)
 
-- [ ] **006_create_link_tags_table.ts** 🚀 Phase 2 (pivot table)
+- [x] **20251111000003_create_link_tags_table.ts** 🚀 Phase 2 ✅ (pivot table)
   - link_id (foreign key)
   - tag_id (foreign key)
+  - created_at
   - Primary key: (link_id, tag_id)
+  - Indexes on both foreign keys
   - Priority: MEDIUM
-  - Status: ⏳ Pending
+  - Status: ✅ Completed (Nov 11, 2025)
+
+- [x] **20251111000004_add_folder_to_links.ts** 🚀 Phase 2 ✅
+  - Added folder_id column to links table (nullable, foreign key)
+  - Index on folder_id for performance
+  - Cascade on delete (set null)
+  - Priority: MEDIUM
+  - Status: ✅ Completed (Nov 11, 2025)
 
 - [ ] **007_create_workspaces_table.ts** 🚀 Phase 2
   - id (primary key)
@@ -635,22 +754,28 @@
 
 ### 🚀 Phase 2 Controllers (Enhanced Features)
 
-- [ ] **FolderController.ts** 🚀 Phase 2
-  - index() - List folders
-  - store() - Create folder
-  - update() - Update folder
-  - destroy() - Delete folder
-  - moveLinks() - Move links to folder
+- [x] **FolderController.ts** 🚀 Phase 2 ✅ COMPLETED
+  - [x] index() - List all folders with link count
+  - [x] store() - Create new folder
+  - [x] update() - Update folder (name, color, icon, description)
+  - [x] destroy() - Delete folder (moves links to null)
+  - [x] moveLinks() - Move multiple links to folder
+  - [x] reorder() - Reorder folders by position
   - Priority: MEDIUM
-  - Status: ⏳ Pending
+  - Status: ✅ Completed (Nov 11, 2025)
+  - Features: User-specific folders, color coding, emoji icons, drag & drop ordering
 
-- [ ] **TagController.ts** 🚀 Phase 2
-  - index() - List tags
-  - store() - Create tag
-  - update() - Update tag
-  - destroy() - Delete tag
+- [x] **TagController.ts** 🚀 Phase 2 ✅ COMPLETED
+  - [x] index() - List all tags with links_count
+  - [x] store() - Create new tag (auto-generate slug)
+  - [x] update() - Update tag (name, color, description)
+  - [x] destroy() - Delete tag (removes all associations)
+  - [x] getForLink() - Get tags for specific link
+  - [x] attachToLink() - Attach multiple tags to link
+  - [x] detachFromLink() - Detach tags from link
   - Priority: MEDIUM
-  - Status: ⏳ Pending
+  - Status: ✅ Completed (Nov 11, 2025)
+  - Features: User-specific tags, slug generation, many-to-many relationships
 
 - [ ] **WorkspaceController.ts** 🚀 Phase 2
   - index() - List workspaces
@@ -922,6 +1047,30 @@
   - Icon support
   - Theme: Dark/Light mode
   - Status: ⏳ Pending
+
+### 🚀 Phase 2 Components (Enhanced Features)
+
+- [x] **FolderSidebar.svelte** 🚀 Phase 2 ✅ COMPLETED
+  - Display folder list with icon & color
+  - Create new folder modal
+  - Filter "All Links" option
+  - Link count per folder
+  - Mobile: Slide-in drawer (< 1024px)
+  - Desktop: Fixed sidebar (≥ 1024px)
+  - Priority: MEDIUM
+  - Status: ✅ Completed (Nov 11, 2025)
+  - Features: Responsive design, touch-optimized, smooth animations
+
+- [x] **TagSelector.svelte** 🚀 Phase 2 ✅ COMPLETED
+  - Multi-select tags dropdown
+  - Create new tag modal
+  - Visual tag badges with colors
+  - Auto-load existing tags (Edit mode)
+  - Mobile: Bottom sheet (70vh)
+  - Desktop: Dropdown below button
+  - Priority: MEDIUM
+  - Status: ✅ Completed (Nov 11, 2025)
+  - Features: 48px+ touch targets, full-screen modal on mobile, keyboard navigation
 
 - [ ] **UI/Modal.svelte**
   - Overlay with backdrop

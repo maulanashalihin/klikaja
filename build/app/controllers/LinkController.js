@@ -402,7 +402,7 @@ class LinkController {
             if (!user) {
                 return response.redirect("/login");
             }
-            const { urls, alias, title, description, rotation_method = 'random', password, expires_at, max_clicks } = await request.json();
+            const { urls, alias, title, description, rotation_method = 'random', password, expires_at, max_clicks, folder_id } = await request.json();
             if (!urls || !Array.isArray(urls) || urls.length === 0) {
                 return response.status(400).json({
                     error: "At least one URL is required"
@@ -450,6 +450,7 @@ class LinkController {
             await DB_1.default.table("links").insert({
                 id: linkId,
                 user_id: user.id,
+                folder_id: folder_id || null,
                 alias: finalAlias,
                 urls: JSON.stringify(urls),
                 rotation_method,
@@ -467,7 +468,11 @@ class LinkController {
                 created_at: now,
                 updated_at: now
             });
-            return response.redirect(`/home?success=Link berhasil dibuat!`);
+            return response.json({
+                success: true,
+                message: 'Link berhasil dibuat!',
+                data: { id: linkId, alias: finalAlias }
+            });
         }
         catch (error) {
             console.error("Error creating link:", error);
@@ -508,7 +513,7 @@ class LinkController {
             }
             const { id } = request.params;
             const body = await request.json();
-            const { urls, title, description, rotation_method = "random", password, expires_at, max_clicks, is_active = true } = body;
+            const { urls, title, description, rotation_method = "random", password, expires_at, max_clicks, is_active = true, folder_id } = body;
             if (!urls || !Array.isArray(urls) || urls.length === 0) {
                 return response.status(400).json({
                     error: "At least one URL is required"
@@ -530,6 +535,7 @@ class LinkController {
                 expires_at: expires_at || null,
                 max_clicks: max_clicks || null,
                 is_active: is_active ? 1 : 0,
+                folder_id: folder_id !== undefined ? folder_id : link.folder_id,
                 updated_at: Date.now()
             };
             if (password && password.trim() !== '') {
