@@ -65,33 +65,63 @@
   const features = [
     {
       icon: '⚡',
-      title: 'Cepat & Mudah',
-      description: 'Perpendek link dalam hitungan detik tanpa perlu login'
+      title: 'Instant & No Login Required',
+      description: 'Perpendek link dalam 1 detik tanpa registrasi. Klaim ownership nanti jika perlu!'
+    },
+    {
+      icon: '🔄',
+      title: 'Smart Link Rotation (3 Methods!)',
+      description: 'Sequential, Random, atau Weighted rotation - Perfect untuk A/B testing & load balancing'
     },
     {
       icon: '📊',
-      title: 'Analytics Real-time',
-      description: 'Lihat statistik klik, lokasi, dan device secara real-time'
+      title: 'Deep Analytics Dashboard',
+      description: 'Track clicks, geo-location, devices, browsers, OS, dan referrers secara real-time'
     },
     {
       icon: '🎨',
-      title: 'Custom Alias',
-      description: 'Buat link yang mudah diingat dengan alias custom'
-    },
-    {
-      icon: '📱',
-      title: 'QR Code Gratis',
-      description: 'Setiap link otomatis dapat QR code untuk kemudahan sharing'
+      title: 'Custom Branded Links',
+      description: 'Buat link memorable: klikaja.app/promo-ramadan, klikaja.app/diskon50'
     },
     {
       icon: '🔒',
-      title: 'Aman & Terpercaya',
-      description: 'Link monitoring dan password protection untuk keamanan'
+      title: 'Password & Expiration Control',
+      description: 'Lindungi link dengan password, set expiration date, dan limit maksimal klik'
     },
     {
-      icon: '🚀',
-      title: 'Link Rotation',
-      description: 'Satu link pendek untuk multiple URL dengan rotation otomatis'
+      icon: '📱',
+      title: 'Auto QR Code Generator',
+      description: 'Setiap link otomatis dapat QR code berkualitas tinggi. Download & share instantly!'
+    },
+    {
+      icon: '💯',
+      title: '100% Open Source (MIT)',
+      description: 'Self-host unlimited GRATIS atau gunakan hosted version. Kode transparan & dapat diaudit'
+    },
+    {
+      icon: '🌙',
+      title: 'Beautiful Dark Mode',
+      description: 'UI modern dengan dark mode support. Nyaman digunakan siang atau malam'
+    },
+    {
+      icon: '⚡',
+      title: 'Built in 1 Day with laju.dev',
+      description: 'Production-ready app dengan 55+ features. Bukti kekuatan modern framework!'
+    },
+    {
+      icon: '🏥',
+      title: 'Link Health Monitoring',
+      description: 'Auto-detect broken links, SSL issues, dan malware scanning. Keep your links safe & working 24/7!'
+    },
+    {
+      icon: '🎯',
+      title: 'Smart Routing & Personalization',
+      description: 'Route traffic berdasarkan time, location, device, atau language. Perfect untuk targeted campaigns!'
+    },
+    {
+      icon: '🔌',
+      title: 'API & Integrations Ready',
+      description: 'RESTful API, Webhooks, Browser Extension. Integrate seamlessly dengan workflow Anda!'
     }
   ];
 </script>
