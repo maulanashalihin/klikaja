@@ -33,6 +33,17 @@ jobs:
           echo " pulling code from GitHub..."
           git pull origin main
 
+          # --- TAMBAHKAN BAGIAN INI ---
+          echo " loading NVM..."
+          # Mengasumsikan NVM diinstal di lokasi default (~/.nvm)
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+          
+          # (Opsional) Jika Anda ingin menggunakan versi Node tertentu
+          # nvm use default
+          # --- BATAS PENAMBAHAN ---
+
           echo " installing dependencies..."
           # Contoh untuk Node.js (sesuaikan dengan teknologi Anda)
           npm install 
