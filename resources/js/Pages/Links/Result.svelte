@@ -148,118 +148,118 @@
     </div>
 
     <!-- Claim Banner -->
-    <div class="bg-gradient-to-r from-[#FF6B35] to-[#004E89] rounded-2xl p-6 md:p-8 text-white shadow-xl mb-6">
-      <div class="flex flex-col md:flex-row items-start gap-6">
-        <div class="flex-1">
+    <div class="bg-gradient-to-r from-[#FF6B35] to-[#004E89] rounded-2xl p-4 sm:p-6 md:p-8 text-white shadow-xl mb-6">
+      <div class="flex flex-col md:flex-row items-start gap-4 md:gap-6">
+        <div class="flex-1 w-full">
           <div class="flex items-center gap-2 mb-3">
-            <span class="text-3xl">🎁</span>
-            <h2 class="text-xl sm:text-2xl md:text-3xl font-bold">
+            <span class="text-2xl sm:text-3xl">🎁</span>
+            <h2 class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold">
               Klaim Link Ini Sekarang!
             </h2>
           </div>
-          <p class="text-base sm:text-lg opacity-90 mb-4">
+          <p class="text-sm sm:text-base md:text-lg opacity-90 mb-3 sm:mb-4">
             Daftar <span class="font-bold">GRATIS</span> dan dapatkan akses penuh ke:
           </p>
           
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4">
             <!-- Analytics -->
-            <div class="flex items-start gap-3 bg-white/10 rounded-lg p-3 backdrop-blur-sm">
-              <div class="flex-shrink-0 w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+            <div class="flex items-start gap-2 sm:gap-3 bg-white/10 rounded-lg p-2 sm:p-3 backdrop-blur-sm">
+              <div class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
                 </svg>
               </div>
-              <div class="flex-1">
-                <h3 class="font-bold text-sm mb-1">📊 Analytics Real-time</h3>
-                <p class="text-xs opacity-80">Lihat klik, lokasi, device, browser, dan referrer secara detail</p>
+              <div class="flex-1 min-w-0">
+                <h3 class="font-bold text-xs sm:text-sm mb-0.5 sm:mb-1">📊 Analytics Real-time</h3>
+                <p class="text-xs opacity-80 leading-tight">Lihat klik, lokasi, device, browser secara detail</p>
               </div>
             </div>
 
             <!-- Edit & Manage -->
-            <div class="flex items-start gap-3 bg-white/10 rounded-lg p-3 backdrop-blur-sm">
-              <div class="flex-shrink-0 w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+            <div class="flex items-start gap-2 sm:gap-3 bg-white/10 rounded-lg p-2 sm:p-3 backdrop-blur-sm">
+              <div class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
                 </svg>
               </div>
-              <div class="flex-1">
-                <h3 class="font-bold text-sm mb-1">✏️ Edit & Kelola</h3>
-                <p class="text-xs opacity-80">Ubah URL tujuan, alias, dan pengaturan kapan saja</p>
+              <div class="flex-1 min-w-0">
+                <h3 class="font-bold text-xs sm:text-sm mb-0.5 sm:mb-1">✏️ Edit & Kelola</h3>
+                <p class="text-xs opacity-80 leading-tight">Ubah URL tujuan, alias, dan pengaturan</p>
               </div>
             </div>
 
             <!-- Password Protection -->
-            <div class="flex items-start gap-3 bg-white/10 rounded-lg p-3 backdrop-blur-sm">
-              <div class="flex-shrink-0 w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+            <div class="flex items-start gap-2 sm:gap-3 bg-white/10 rounded-lg p-2 sm:p-3 backdrop-blur-sm">
+              <div class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
                 </svg>
               </div>
-              <div class="flex-1">
-                <h3 class="font-bold text-sm mb-1">🔒 Password Protection</h3>
-                <p class="text-xs opacity-80">Lindungi link dengan password untuk keamanan ekstra</p>
+              <div class="flex-1 min-w-0">
+                <h3 class="font-bold text-xs sm:text-sm mb-0.5 sm:mb-1">🔒 Password Protection</h3>
+                <p class="text-xs opacity-80 leading-tight">Lindungi link dengan password</p>
               </div>
             </div>
 
             <!-- Expiration & Limits -->
-            <div class="flex items-start gap-3 bg-white/10 rounded-lg p-3 backdrop-blur-sm">
-              <div class="flex-shrink-0 w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+            <div class="flex items-start gap-2 sm:gap-3 bg-white/10 rounded-lg p-2 sm:p-3 backdrop-blur-sm">
+              <div class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
                 </svg>
               </div>
-              <div class="flex-1">
-                <h3 class="font-bold text-sm mb-1">⏰ Expiration & Limits</h3>
-                <p class="text-xs opacity-80">Atur tanggal kadaluarsa dan batas maksimal klik</p>
+              <div class="flex-1 min-w-0">
+                <h3 class="font-bold text-xs sm:text-sm mb-0.5 sm:mb-1">⏰ Expiration & Limits</h3>
+                <p class="text-xs opacity-80 leading-tight">Atur tanggal kadaluarsa dan max klik</p>
               </div>
             </div>
 
             <!-- Link Rotation -->
-            <div class="flex items-start gap-3 bg-white/10 rounded-lg p-3 backdrop-blur-sm">
-              <div class="flex-shrink-0 w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+            <div class="flex items-start gap-2 sm:gap-3 bg-white/10 rounded-lg p-2 sm:p-3 backdrop-blur-sm">
+              <div class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
                 </svg>
               </div>
-              <div class="flex-1">
-                <h3 class="font-bold text-sm mb-1">🔄 Link Rotation</h3>
-                <p class="text-xs opacity-80">Satu link untuk multiple URL dengan A/B testing</p>
+              <div class="flex-1 min-w-0">
+                <h3 class="font-bold text-xs sm:text-sm mb-0.5 sm:mb-1">🔄 Link Rotation</h3>
+                <p class="text-xs opacity-80 leading-tight">Multiple URL dengan A/B testing</p>
               </div>
             </div>
 
             <!-- Folders & Tags -->
-            <div class="flex items-start gap-3 bg-white/10 rounded-lg p-3 backdrop-blur-sm">
-              <div class="flex-shrink-0 w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+            <div class="flex items-start gap-2 sm:gap-3 bg-white/10 rounded-lg p-2 sm:p-3 backdrop-blur-sm">
+              <div class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/>
                 </svg>
               </div>
-              <div class="flex-1">
-                <h3 class="font-bold text-sm mb-1">📁 Folders & Tags</h3>
-                <p class="text-xs opacity-80">Organisir link dengan folder dan tag untuk kemudahan</p>
+              <div class="flex-1 min-w-0">
+                <h3 class="font-bold text-xs sm:text-sm mb-0.5 sm:mb-1">📁 Folders & Tags</h3>
+                <p class="text-xs opacity-80 leading-tight">Organisir link dengan folder dan tag</p>
               </div>
             </div>
           </div>
 
-          <div class="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
-            <p class="text-sm font-semibold mb-2">✨ Plus Bonus:</p>
-            <ul class="text-xs space-y-1 opacity-90">
+          <div class="bg-white/10 rounded-lg p-2 sm:p-3 backdrop-blur-sm">
+            <p class="text-xs sm:text-sm font-semibold mb-1.5 sm:mb-2">✨ Plus Bonus:</p>
+            <ul class="text-xs space-y-0.5 sm:space-y-1 opacity-90 leading-tight">
               <li>• <span class="font-semibold">Unlimited</span> link shortening</li>
               <li>• <span class="font-semibold">Custom QR</span> code dengan branding</li>
               <li>• <span class="font-semibold">Export data</span> analytics ke CSV/PDF</li>
-              <li>• <span class="font-semibold">Team collaboration</span> untuk workspace</li>
+              <li>• <span class="font-semibold">Team collaboration</span> workspace</li>
             </ul>
           </div>
         </div>
         
-        <div class="flex flex-col gap-3 md:min-w-[200px]">
+        <div class="flex flex-col gap-2 sm:gap-3 w-full md:min-w-[200px]">
           <a
             href="/claim/{link.claim_token}"
             use:inertia
-            class="px-6 py-4 bg-white text-[#FF6B35] font-bold rounded-lg hover:bg-gray-100 transition-all duration-200 shadow-lg text-center transform hover:scale-105"
+            class="px-4 sm:px-6 py-3 sm:py-4 bg-white text-[#FF6B35] font-bold rounded-lg hover:bg-gray-100 transition-all duration-200 shadow-lg text-center transform hover:scale-105"
           >
-            <div class="text-2xl mb-1">🔐</div>
-            <div>Klaim Sekarang</div>
+            <div class="text-xl sm:text-2xl mb-1">🔐</div>
+            <div class="text-sm sm:text-base">Klaim Sekarang</div>
           </a>
           <div class="text-center">
             <p class="text-xs opacity-75 mb-1">
