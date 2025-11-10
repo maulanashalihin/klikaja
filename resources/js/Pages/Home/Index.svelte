@@ -115,6 +115,22 @@
 
   <!-- Hero Section -->
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+    <!-- Early Access Banner -->
+    <div class="max-w-3xl mx-auto mb-8">
+      <div class="bg-gradient-to-r from-[#FF6B35]/10 to-[#004E89]/10 dark:from-[#FF6B35]/20 dark:to-[#004E89]/20 border-2 border-[#FF6B35]/30 rounded-xl p-4 text-center">
+        <div class="flex items-center justify-center gap-2 mb-2">
+          <span class="text-2xl">🚀</span>
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white">Early Access</h3>
+        </div>
+        <p class="text-sm text-gray-700 dark:text-gray-300">
+          KlikAja masih dalam tahap pengembangan awal. Jika menemukan masalah, silakan laporkan ke
+          <a href="mailto:maulana@drip.id" class="text-[#FF6B35] hover:text-[#004E89] dark:hover:text-[#00D9FF] font-semibold underline">
+            maulana@drip.id
+          </a>
+        </p>
+      </div>
+    </div>
+
     <div class="text-center mb-12">
       <h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4">
         <span class="text-[#FF6B35]">Satu Klik</span>, Semua Terhubung
@@ -269,6 +285,16 @@
   <!-- Footer -->
   <footer class="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 mt-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Early Access Notice -->
+      <div class="text-center mb-6 pb-6 border-b border-gray-200 dark:border-gray-700">
+        <p class="text-sm text-gray-600 dark:text-gray-400">
+          🚀 <span class="font-semibold text-[#FF6B35]">Early Access</span> - KlikAja sedang dalam pengembangan aktif.
+        </p>
+        <p class="text-sm text-gray-500 dark:text-gray-500 mt-1">
+          Ada masalah? Hubungi kami di <a href="mailto:maulana@drip.id" class="text-[#FF6B35] hover:underline font-medium">maulana@drip.id</a>
+        </p>
+      </div>
+
       <div class="flex flex-col md:flex-row justify-between items-center gap-4">
         <div class="flex items-center gap-2">
           <KlikAjaLogo size="small" />
@@ -277,17 +303,14 @@
           </span>
         </div>
         <div class="flex gap-6 text-sm">
-          <a href="#" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">
-            Tentang
-          </a>
-          <a href="#" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">
-            Fitur
-          </a>
-          <a href="#" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">
-            Harga
-          </a>
-          <a href="#" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">
+          <a href="mailto:maulana@drip.id" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">
             Kontak
+          </a>
+          <a href="https://github.com" target="_blank" rel="noopener" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">
+            GitHub
+          </a>
+          <a href="https://twitter.com" target="_blank" rel="noopener" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">
+            Twitter
           </a>
         </div>
       </div>

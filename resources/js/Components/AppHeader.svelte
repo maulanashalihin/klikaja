@@ -47,8 +47,11 @@
     <div class="flex justify-between items-center h-16">
       <!-- Logo & Brand -->
       <div class="flex items-center gap-8">
-        <a href="/home" use:inertia class="flex items-center gap-2 hover:opacity-80 transition-opacity">
-          <KlikAjaLogo size="default" />
+        <a href="/home" use:inertia class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+          <KlikAjaLogo />
+          <span class="hidden sm:inline-block px-2 py-1 text-xs font-semibold bg-gradient-to-r from-[#FF6B35] to-[#ff5722] text-white rounded-full">
+            Early Access
+          </span>
         </a>
 
         <!-- Desktop Navigation -->
