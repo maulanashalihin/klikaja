@@ -230,7 +230,7 @@ class LinkController {
             }
             const urls = JSON.parse(link.urls);
             const originalUrl = urls[0];
-            const protocol = request.secure ? 'https' : 'http';
+            const protocol = process.env.APP_URL.includes("https") ? 'https' : 'http';
             const host = request.headers.host || 'localhost:3000';
             const shortUrl = `${protocol}://${host}/${link.alias}`;
             return response.inertia("Links/Result", {

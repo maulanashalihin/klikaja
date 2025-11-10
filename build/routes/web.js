@@ -14,6 +14,12 @@ const S3Controller_1 = __importDefault(require("../app/controllers/S3Controller"
 const hyper_express_1 = __importDefault(require("hyper-express"));
 const Route = new hyper_express_1.default.Router();
 Route.get("/", HomeController_1.default.index);
+Route.get("/about", HomeController_1.default.about);
+Route.get("/features", HomeController_1.default.features);
+Route.get("/pricing", HomeController_1.default.pricing);
+Route.get("/privacy", HomeController_1.default.privacy);
+Route.get("/terms", HomeController_1.default.terms);
+Route.get("/contact", HomeController_1.default.contact);
 Route.post("/shorten", LinkController_1.default.storeAnonymous);
 Route.get("/result/:claim_token", LinkController_1.default.showResult);
 Route.get("/claim/:claim_token", LinkController_1.default.claimLink);
