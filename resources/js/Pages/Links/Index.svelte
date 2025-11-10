@@ -27,6 +27,10 @@
     }
   }
 
+  function openLink(alias) {
+    window.open(`/${alias}`, '_blank');
+  }
+
   function handleSearch() {
     const params = new URLSearchParams();
     if (searchQuery) params.set('search', searchQuery);
@@ -167,21 +171,24 @@
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
               <!-- Link Info -->
               <div class="flex-1 min-w-0">
-                <div class="flex items-center gap-3 mb-2">
-                  <h3 class="text-lg font-bold text-gray-900 dark:text-white truncate">
-                    klikaja.com/{link.alias}
+                <!-- Title First -->
+                {#if link.title}
+                  <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2 truncate">
+                    {link.title}
                   </h3>
-                  <span class="px-3 py-1 rounded-full text-xs font-semibold {link.is_active ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400'}">
+                {/if}
+
+                <!-- Alias & Status -->
+                <div class="flex items-center gap-3 mb-2">
+                  <span class="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    klikaja.com/{link.alias}
+                  </span>
+                  <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold {link.is_active ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400'}">
                     {link.is_active ? '✓ Active' : '✗ Inactive'}
                   </span>
                 </div>
 
-                {#if link.title}
-                  <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    {link.title}
-                  </p>
-                {/if}
-
+                <!-- Destination -->
                 <p class="text-sm text-gray-500 dark:text-gray-400 mb-2 truncate">
                   → {Array.isArray(link.urls) ? link.urls[0].url || link.urls[0] : link.urls}
                   {#if Array.isArray(link.urls) && link.urls.length > 1}
@@ -189,6 +196,7 @@
                   {/if}
                 </p>
 
+                <!-- Stats -->
                 <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
                   <span class="flex items-center gap-1">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -207,7 +215,7 @@
                 <!-- Copy Button -->
                 <button
                   onclick={() => copyToClipboard(link.alias)}
-                  class="p-2 text-gray-600 dark:text-gray-400 hover:text-[#FF6B35] hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                  class="p-2 text-gray-600 dark:text-gray-400 hover:text-[#FF6B35] hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
                   title="Copy Link"
                 >
                   <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -215,10 +223,21 @@
                   </svg>
                 </button>
 
+                <!-- Open Link Button -->
+                <button
+                  onclick={() => openLink(link.alias)}
+                  class="p-2 text-gray-600 dark:text-gray-400 hover:text-[#00D9FF] hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                  title="Buka Link"
+                >
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </button>
+
                 <!-- Toggle Status -->
                 <button
                   onclick={() => handleToggle(link.id)}
-                  class="p-2 text-gray-600 dark:text-gray-400 hover:text-[#00D9FF] hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                  class="p-2 text-gray-600 dark:text-gray-400 hover:text-[#00D9FF] hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
                   title={link.is_active ? 'Nonaktifkan' : 'Aktifkan'}
                 >
                   <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -230,7 +249,7 @@
                 <a
                   href="/analytics/{link.alias}"
                   use:inertia
-                  class="p-2 text-gray-600 dark:text-gray-400 hover:text-[#00D9FF] hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                  class="p-2 text-gray-600 dark:text-gray-400 hover:text-[#00D9FF] hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
                   title="Analytics"
                 >
                   <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -242,7 +261,7 @@
                 <a
                   href="/links/{link.id}/edit"
                   use:inertia
-                  class="p-2 text-gray-600 dark:text-gray-400 hover:text-[#004E89] hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                  class="p-2 text-gray-600 dark:text-gray-400 hover:text-[#004E89] hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
                   title="Edit"
                 >
                   <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
