@@ -19,6 +19,24 @@ const Route = new HyperExpress.Router();
 Route.get("/", HomeController.index);
 
 /**
+ * SEO-Friendly Static Pages
+ * Crawlable HTML pages for better SEO
+ * ------------------------------------------------
+ * GET  /about - About us page
+ * GET  /features - Features showcase
+ * GET  /pricing - Pricing information
+ * GET  /privacy - Privacy policy
+ * GET  /terms - Terms of service
+ * GET  /contact - Contact page
+ */
+Route.get("/about", HomeController.about);
+Route.get("/features", HomeController.features);
+Route.get("/pricing", HomeController.pricing);
+Route.get("/privacy", HomeController.privacy);
+Route.get("/terms", HomeController.terms);
+Route.get("/contact", HomeController.contact);
+
+/**
  * Link Shortening Routes (Public)
  * Routes for anonymous link creation and viewing
  * ------------------------------------------------
