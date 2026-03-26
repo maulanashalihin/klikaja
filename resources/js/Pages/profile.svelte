@@ -1,6 +1,7 @@
 <script>
   import axios from "axios";
   import AppHeader from "../Components/AppHeader.svelte";
+  import Icon from "../Components/Icon.svelte";
   import { Toast } from "../Components/helper";
   export let user;
 
@@ -10,9 +11,6 @@
   let isLoading = false;
   let avatarFile;
   let previewUrl = user.avatar || null;
- 
-
- 
 
   function handleAvatarChange(event) {
     const file = event.target.files[0];
@@ -34,7 +32,7 @@
         });
     }
   }
- 
+
   async function changeProfile() {
     isLoading = true;
     try {
@@ -42,7 +40,7 @@
       Toast("Profile updated", "success");
     } catch (error) {
       if (error.response.data.code == "SQLITE_CONSTRAINT_UNIQUE") {
-        Toast("username atau email sudah digunakan", "error");
+        Toast("Username or email already taken", "error");
       } else {
         Toast(error.response.data.code, "error");
       }
@@ -83,250 +81,161 @@
   <AppHeader {user} currentPage="profile" />
 
   <div class="max-w-4xl mx-auto p-4 pt-8">
-  <div class="max-w-3xl mx-auto mb-8">
-    <div
-      class="bg-white mt-24 dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden"
-    >
-      <div class="p-6">
-        <div class="flex items-center space-x-4">
-          <div class="relative group">
-            <div
-              class="w-20 h-20 rounded-full bg-gradient-to-br from-[#FF6B35] to-[#004E89] overflow-hidden"
-            >
-              {#if previewUrl}
-                <img
-                  src={previewUrl}
-                  alt="Profile"
-                  class="w-full h-full object-cover"
-                />
-              {:else}
-                <div class="w-full h-full flex items-center justify-center">
-                  <span
-                    class="text-2xl font-bold text-white"
-                  >
-                    {user.name.charAt(0).toUpperCase()}
-                  </span>
-                </div>
-              {/if}
+    <div class="max-w-3xl mx-auto mb-8">
+      <div class="bg-white dark:bg-[#111827] rounded-3xl shadow-sm overflow-hidden border border-gray-100 dark:border-white/5">
+        <div class="p-6">
+          <div class="flex items-center space-x-4">
+            <div class="relative group">
+              <div class="w-20 h-20 rounded-full bg-gradient-to-br from-brand-orange-500 to-brand-orange-400 overflow-hidden">
+                {#if previewUrl}
+                  <img src={previewUrl} alt="Profile" class="w-full h-full object-cover" />
+                {:else}
+                  <div class="w-full h-full flex items-center justify-center">
+                    <span class="text-2xl font-bold text-white">
+                      {user.name.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                {/if}
+              </div>
+              <label class="absolute bottom-0 right-0 bg-brand-orange-500 hover:bg-brand-orange-600 text-white p-1.5 rounded-xl transition-colors">
+                <Icon name="camera" size={16} />
+                <input type="file" accept="image/*" onchange={handleAvatarChange} class="hidden" />
+              </label>
             </div>
-            <label
-              class="absolute bottom-0 right-0 bg-[#FF6B35] text-white p-1.5 rounded-full cursor-pointer hover:bg-[#ff5722] transition-colors"
-            >
-              <svg
-                class="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-                ></path>
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-                ></path>
-              </svg>
-              <input
-                type="file"
-                accept="image/*"
-                on:change={handleAvatarChange}
-                class="hidden"
-              />
-            </label>
-          </div>
-          <div>
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-              {user.name}
-            </h1>
-            <p class="text-gray-500 dark:text-gray-400">{user.email}</p>
+            <div>
+              <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{user.name}</h1>
+              <p class="text-gray-500 dark:text-gray-400">{user.email}</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="max-w-3xl mx-auto space-y-6">
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-      <div class="p-6">
-        <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-6">
-          Personal Information
-        </h2>
-        <form on:submit|preventDefault={changeProfile} class="space-y-6">
-          <div class="grid grid-cols-1 gap-6">
-            <div class="space-y-1">
-              <label
-                for="name"
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >Name</label
-              >
-              <input
-                bind:value={user.name}
-                type="text"
-                id="name"
-                class="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-[#FF6B35]/20 focus:border-[#FF6B35] dark:focus:ring-[#FF6B35]/20 dark:focus:border-[#FF6B35] dark:text-white transition duration-200 ease-in-out"
-                placeholder="Your full name"
-              />
+    <div class="max-w-3xl mx-auto space-y-6">
+      <!-- Personal Information -->
+      <div class="bg-white dark:bg-[#111827] rounded-3xl shadow-sm border border-gray-100 dark:border-white/5">
+        <div class="p-6">
+          <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+            <div class="w-10 h-10 bg-gradient-to-br from-brand-orange-500 to-brand-orange-400 rounded-xl flex items-center justify-center">
+              <Icon name="user" size={20} color="#ffffff" />
+            </div>
+            Personal Information
+          </h2>
+          <form onsubmit={changeProfile} class="space-y-6">
+            <div class="grid grid-cols-1 gap-6">
+              <div class="space-y-1">
+                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
+                <input
+                  bind:value={user.name}
+                  type="text"
+                  id="name"
+                  class="w-full px-4 py-3 rounded-xl bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-brand-orange-500/50 focus:border-transparent dark:text-white transition duration-200 ease-in-out"
+                  placeholder="Your full name"
+                />
+              </div>
+
+              <div class="space-y-1">
+                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                <input
+                  bind:value={user.email}
+                  type="email"
+                  id="email"
+                  class="w-full px-4 py-3 rounded-xl bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-brand-orange-500/50 focus:border-transparent dark:text-white transition duration-200 ease-in-out"
+                  placeholder="you@example.com"
+                />
+              </div>
+
+              <div class="space-y-1">
+                <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone</label>
+                <input
+                  bind:value={user.phone}
+                  type="text"
+                  id="phone"
+                  class="w-full px-4 py-3 rounded-xl bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-brand-orange-500/50 focus:border-transparent dark:text-white transition duration-200 ease-in-out"
+                  placeholder="Your phone number"
+                />
+              </div>
             </div>
 
-            <div class="space-y-1">
-              <label
-                for="email"
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >Email</label
+            <div class="flex justify-end">
+              <button
+                type="submit"
+                disabled={isLoading}
+                class="inline-flex items-center px-4 py-2 rounded-xl bg-brand-orange-500 hover:bg-brand-orange-600 text-white font-medium shadow-md shadow-brand-orange-500/20 active:scale-[0.98] transition duration-200 ease-in-out dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-              <input
-                bind:value={user.email}
-                type="email"
-                id="email"
-                class="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-[#FF6B35]/20 focus:border-[#FF6B35] dark:focus:ring-[#FF6B35]/20 dark:focus:border-[#FF6B35] dark:text-white transition duration-200 ease-in-out"
-                placeholder="you@example.com"
-              />
+                {#if isLoading}
+                  <Icon name="loader" size={16} class="animate-spin -ml-1 mr-2" />
+                  Saving...
+                {:else}
+                  <Icon name="save" size={16} class="mr-2" />
+                  Save Changes
+                {/if}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Change Password -->
+      <div class="bg-white dark:bg-[#111827] rounded-3xl shadow-sm border border-gray-100 dark:border-white/5">
+        <div class="p-6">
+          <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+            <div class="w-10 h-10 bg-gradient-to-br from-brand-orange-500 to-brand-orange-400 rounded-xl flex items-center justify-center">
+              <Icon name="lock" size={20} color="#ffffff" />
+            </div>
+            Change Password
+          </h2>
+          <form onsubmit={changePassword} class="space-y-6">
+            <div class="grid grid-cols-1 gap-6">
+              <div>
+                <label for="current_password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Current Password</label>
+                <input
+                  bind:value={current_password}
+                  type="password"
+                  id="current_password"
+                  class="w-full px-4 py-3 rounded-xl bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-brand-orange-500/50 focus:border-transparent dark:text-white transition duration-200 ease-in-out"
+                />
+              </div>
+
+              <div>
+                <label for="new_password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">New Password</label>
+                <input
+                  bind:value={new_password}
+                  type="password"
+                  id="new_password"
+                  class="w-full px-4 py-3 rounded-xl bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-brand-orange-500/50 focus:border-transparent dark:text-white transition duration-200 ease-in-out"
+                />
+              </div>
+
+              <div>
+                <label for="confirm_password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Confirm New Password</label>
+                <input
+                  bind:value={confirm_password}
+                  type="password"
+                  id="confirm_password"
+                  class="w-full px-4 py-3 rounded-xl bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-brand-orange-500/50 focus:border-transparent dark:text-white transition duration-200 ease-in-out"
+                />
+              </div>
             </div>
 
-            
-
-            <div class="space-y-1">
-              <label
-                for="phone"
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >Phone</label
+            <div class="flex justify-end">
+              <button
+                type="submit"
+                disabled={isLoading}
+                class="inline-flex items-center px-4 py-2 rounded-xl bg-brand-orange-500 hover:bg-brand-orange-600 text-white font-medium shadow-md shadow-brand-orange-500/20 active:scale-[0.98] transition duration-200 ease-in-out dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-              <input
-                bind:value={user.phone}
-                type="text"
-                id="phone"
-                class="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-[#FF6B35]/20 focus:border-[#FF6B35] dark:focus:ring-[#FF6B35]/20 dark:focus:border-[#FF6B35] dark:text-white transition duration-200 ease-in-out"
-                placeholder="Your phone number"
-              />
+                {#if isLoading}
+                  <Icon name="loader" size={16} class="animate-spin -ml-1 mr-2" />
+                  Updating...
+                {:else}
+                  <Icon name="lock" size={16} class="mr-2" />
+                  Update Password
+                {/if}
+              </button>
             </div>
-          </div>
-
-          <div class="flex justify-end">
-            <button
-              type="submit"
-              disabled={isLoading}
-              class="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-[#FF6B35] to-[#ff5722] hover:shadow-lg text-white font-medium shadow-sm transition duration-200 ease-in-out dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {#if isLoading}
-                <svg
-                  class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    class="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    stroke-width="4"
-                  ></circle>
-                  <path
-                    class="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-                Saving...
-              {:else}
-                Save Changes
-              {/if}
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
-
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-      <div class="p-6">
-        <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-6">
-          Change Password
-        </h2>
-        <form on:submit|preventDefault={changePassword} class="space-y-6">
-          <div class="grid grid-cols-1 gap-6">
-            <div>
-              <label
-                for="current_password"
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >Current Password</label
-              >
-              <input
-                bind:value={current_password}
-                type="password"
-                id="current_password"
-                class="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-[#FF6B35]/20 focus:border-[#FF6B35] dark:focus:ring-[#FF6B35]/20 dark:focus:border-[#FF6B35] dark:text-white transition duration-200 ease-in-out"
-              />
-            </div>
-
-            <div>
-              <label
-                for="new_password"
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >New Password</label
-              >
-              <input
-                bind:value={new_password}
-                type="password"
-                id="new_password"
-                class="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-[#FF6B35]/20 focus:border-[#FF6B35] dark:focus:ring-[#FF6B35]/20 dark:focus:border-[#FF6B35] dark:text-white transition duration-200 ease-in-out"
-              />
-            </div>
-
-            <div>
-              <label
-                for="confirm_password"
-                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >Confirm New Password</label
-              >
-              <input
-                bind:value={confirm_password}
-                type="password"
-                id="confirm_password"
-                class="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-[#FF6B35]/20 focus:border-[#FF6B35] dark:focus:ring-[#FF6B35]/20 dark:focus:border-[#FF6B35] dark:text-white transition duration-200 ease-in-out"
-              />
-            </div>
-          </div>
-
-          <div class="flex justify-end">
-            <button
-              type="submit"
-              disabled={isLoading}
-              class="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-[#FF6B35] to-[#ff5722] hover:shadow-lg text-white font-medium shadow-sm transition duration-200 ease-in-out dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {#if isLoading}
-                <svg
-                  class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    class="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    stroke-width="4"
-                  ></circle>
-                  <path
-                    class="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-                Updating...
-              {:else}
-                Update Password
-              {/if}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
   </div>
 </div>

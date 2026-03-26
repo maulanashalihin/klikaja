@@ -80,10 +80,10 @@
       <!-- Auth Buttons -->
       <div class="hidden sm:flex items-center space-x-3 dark:text-gray-300">
         {#if user && user.id}
-          <div class="relative" use:clickOutside on:click_outside={() => isUserMenuOpen = false}>
-            <button 
+          <div class="relative" use:clickOutside onclick_outside={() => isUserMenuOpen = false}>
+            <button
               class="flex items-center space-x-2 hover:bg-gray-100 p-2 rounded-lg dark:hover:bg-gray-800"
-              on:click={() => isUserMenuOpen = !isUserMenuOpen}
+              onclick={() => isUserMenuOpen = !isUserMenuOpen}
             >
               <div class="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
                 <span class="text-primary-700 font-medium">{user.name[0].toUpperCase()}</span>
@@ -103,8 +103,8 @@
                
                 <a href="/profile" use:inertia class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Edit Profile</a>
                 <a href="/settings" use:inertia class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Settings</a>
-                <button 
-                  on:click={handleLogout}
+                <button
+                  onclick={handleLogout}
                   class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                   Logout
@@ -121,7 +121,7 @@
       <!-- Mobile Menu Button -->
       <button
         class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-400"
-        on:click={() => isMenuOpen = !isMenuOpen}
+        onclick={() => isMenuOpen = !isMenuOpen}
         aria-label="Menu"
       >
         <svg
@@ -154,14 +154,14 @@
   {#if isMenuOpen}
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <!-- svelte-ignore a11y_no_static_element_interactions -->
-  <div  
-    use:clickOutside on:click_outside={() => isMenuOpen = false}
-    class="fixed inset-0 bg-black/20   backdrop-blur-sm z-50 md:hidden {isMenuOpen ? 'block' : 'hidden'}"
-    on:click={() => (isMenuOpen = false)}
+  <div
+    use:clickOutside onclick_outside={() => isMenuOpen = false}
+    class="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 md:hidden {isMenuOpen ? 'block' : 'hidden'}"
+    onclick={() => (isMenuOpen = false)}
   >
     <div
       class="absolute right-0 top-0 h-screen w-64 bg-white dark:bg-gray-800 shadow-lg"
-      on:click|stopPropagation
+      onclick={(e) => e.stopPropagation()}
     >
       <div class="flex flex-col p-4 space-y-4">
         {#each menuLinks.filter((item) => item.show) as item}
@@ -176,9 +176,9 @@
       <div class="px-4 py-3 border-t dark:border-gray-700 border-gray-200">
         <div class="flex items-center space-x-3">
           {#if user}
-            <button 
+            <button
               class="flex-1 btn-secondary dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 dark:hover:text-white dark:text-gray-400 text-sm py-2"
-              on:click={handleLogout}
+              onclick={handleLogout}
             >
               Logout
             </button>

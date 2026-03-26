@@ -3,6 +3,7 @@
   import { onMount } from 'svelte';
   import AppHeader from '../../Components/AppHeader.svelte';
   import TagSelector from '../../Components/TagSelector.svelte';
+  import Icon from '../../Components/Icon.svelte';
   import { Toast } from '../../Components/helper.js';
   import axios from 'axios';
 
@@ -10,7 +11,7 @@
 
   // Form state - Pre-fill with existing data
   let urls = $state(
-    Array.isArray(link.urls) 
+    Array.isArray(link.urls)
       ? link.urls.map(u => typeof u === 'string' ? { url: u, weight: 100 } : u)
       : [{ url: link.urls, weight: 100 }]
   );
@@ -25,11 +26,11 @@
   let selectedTags = $state([]);
   let isAdvancedOpen = $state(false);
   let isActive = $state(link.is_active);
-  
+
   // Folders
   let folders = $state([]);
   let loadingFolders = $state(true);
-  
+
   onMount(async () => {
     try {
       const response = await axios.get('/api/folders');
@@ -56,7 +57,7 @@
   // Submit form
   async function handleSubmit() {
     const formData = {
-      urls: rotationMethod === 'weighted' 
+      urls: rotationMethod === 'weighted'
         ? urls.map(u => ({ url: u.url, weight: parseInt(u.weight) || 100 }))
         : urls.map(u => u.url),
       title: title || undefined,
@@ -72,36 +73,36 @@
     try {
       // Update link
       await axios.put(`/links/${link.id}`, formData);
-      
+
       // Get current tags
       const currentTagsResponse = await axios.get(`/api/links/${link.id}/tags`);
       const currentTags = currentTagsResponse.data.data || [];
-      
+
       // Find tags to attach and detach
       const currentTagIds = currentTags.map(t => t.id);
       const selectedTagIds = selectedTags.map(t => t.id);
-      
+
       const toAttach = selectedTagIds.filter(id => !currentTagIds.includes(id));
       const toDetach = currentTagIds.filter(id => !selectedTagIds.includes(id));
-      
+
       // Attach new tags
       if (toAttach.length > 0) {
         await axios.post(`/api/links/${link.id}/tags`, {
           tag_ids: toAttach
         });
       }
-      
+
       // Detach removed tags
       if (toDetach.length > 0) {
         await axios.delete(`/api/links/${link.id}/tags`, {
           data: { tag_ids: toDetach }
         });
       }
-      
-      Toast('Link berhasil diupdate!', 'success');
-       
+
+      Toast('Link updated successfully!', 'success');
+
     } catch (error) {
-      Toast(error.response?.data?.message || 'Gagal update link', 'error');
+      Toast(error.response?.data?.message || 'Failed to update link', 'error');
     }
   }
 </script>
@@ -113,32 +114,32 @@
   <!-- Main Content -->
   <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Link Info Card -->
-    <div class="bg-gradient-to-r from-[#FF6B35]/10 to-[#004E89]/10 dark:from-[#FF6B35]/20 dark:to-[#004E89]/20 rounded-xl p-6 mb-6 border border-[#FF6B35]/20">
+    <div class="bg-gradient-to-r from-brand-orange-500/10 to-blue-600/10 dark:from-brand-orange-500/20 dark:to-blue-600/20 rounded-3xl p-6 mb-6 border border-brand-orange-500/20">
       <div class="flex items-start justify-between">
         <div class="flex-1">
           <div class="flex items-center gap-3 mb-2">
             <h3 class="text-lg font-bold text-gray-900 dark:text-white">
-              kliakaja.app/{alias}
+              klikaja.app/{alias}
             </h3>
             <span class="px-3 py-1 rounded-full text-xs font-semibold {isActive ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400'}">
-              {isActive ? '✓ Active' : '✗ Inactive'}
+              {isActive ? 'Active' : 'Inactive'}
             </span>
           </div>
           <div class="grid grid-cols-3 gap-4 mt-4">
             <div>
               <p class="text-xs text-gray-500 dark:text-gray-400">Total Clicks</p>
-              <p class="text-2xl font-bold text-[#FF6B35]">{link.click_count || 0}</p>
+              <p class="text-2xl font-bold text-brand-orange-500">{link.click_count || 0}</p>
             </div>
             <div>
               <p class="text-xs text-gray-500 dark:text-gray-400">Created</p>
               <p class="text-sm font-semibold text-gray-900 dark:text-white">
-                {new Date(link.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                {new Date(link.created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
               </p>
             </div>
             <div>
               <p class="text-xs text-gray-500 dark:text-gray-400">Last Updated</p>
               <p class="text-sm font-semibold text-gray-900 dark:text-white">
-                {new Date(link.updated_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                {new Date(link.updated_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
               </p>
             </div>
           </div>
@@ -147,9 +148,9 @@
     </div>
 
     <form onsubmit={(e) => { e.preventDefault(); handleSubmit(); }} class="space-y-6">
-      
+
       <!-- URLs Section -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+      <div class="bg-white dark:bg-[#111827] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-white/5">
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-lg font-bold text-gray-900 dark:text-white">
             Destination URLs
@@ -168,7 +169,7 @@
                   bind:value={urlItem.url}
                   placeholder="https://example.com/your-long-url"
                   required
-                  class="w-full px-4 py-3 bg-gray-50 focus:outline-none dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                  class="w-full px-4 py-3 bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-brand-orange-500/50 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                 />
               </div>
 
@@ -181,7 +182,7 @@
                       min="1"
                       max="100"
                       placeholder="Weight"
-                      class="w-full px-3 py-3 bg-gray-50 focus:outline-none dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent text-gray-900 dark:text-white text-center"
+                      class="w-full px-3 py-3 bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-brand-orange-500/50 focus:border-transparent text-gray-900 dark:text-white text-center"
                     />
                   </div>
                 {/if}
@@ -190,12 +191,10 @@
                   <button
                     type="button"
                     onclick={() => removeUrl(index)}
-                    class="px-4 sm:px-3 py-3 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors duration-200 flex-shrink-0"
+                    class="px-4 sm:px-3 py-3 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors duration-200 flex-shrink-0"
                     title="Remove URL"
                   >
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                    </svg>
+                    <Icon name="trash-2" size={20} />
                   </button>
                 {/if}
               </div>
@@ -206,9 +205,10 @@
         <button
           type="button"
           onclick={addUrl}
-          class="mt-3 w-full px-4 py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-600 dark:text-gray-400 hover:border-[#FF6B35] hover:text-[#FF6B35] transition-colors duration-200 font-medium"
+          class="mt-3 w-full px-4 py-3 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl text-gray-600 dark:text-gray-400 hover:border-brand-orange-500 hover:text-brand-orange-500 transition-colors duration-200 font-medium flex items-center justify-center gap-2"
         >
-          + Tambah URL
+          <Icon name="plus" size={20} />
+          Add URL
         </button>
 
         {#if errors.urls}
@@ -217,7 +217,7 @@
       </div>
 
       <!-- Alias Section (Read-only) -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+      <div class="bg-white dark:bg-[#111827] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-white/5">
         <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
           Custom Alias
         </h2>
@@ -225,24 +225,25 @@
         <div class="relative">
           <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <span class="text-gray-500 dark:text-gray-400 font-mono text-sm">
-              kliakaja.app/
+              klikaja.app/
             </span>
           </div>
           <input
             type="text"
             value={alias}
             disabled
-            class="w-full pl-32 pr-4 py-3 bg-gray-100 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-400 font-mono cursor-not-allowed"
+            class="w-full pl-32 pr-4 py-3 bg-gray-100 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-xl text-gray-700 dark:text-gray-400 font-mono cursor-not-allowed"
           />
         </div>
 
-        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-          ℹ️ Alias tidak dapat diubah setelah link dibuat
+        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
+          <Icon name="info" size={16} />
+          Alias cannot be changed after the link is created
         </p>
       </div>
 
       <!-- Metadata Section -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+      <div class="bg-white dark:bg-[#111827] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-white/5">
         <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
           Metadata (Optional)
         </h2>
@@ -257,7 +258,7 @@
               bind:value={title}
               placeholder="My Campaign Link"
               maxlength="255"
-              class="w-full px-4 py-3 bg-gray-50 focus:outline-none dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+              class="w-full px-4 py-3 bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-brand-orange-500/50 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
             />
           </div>
 
@@ -269,14 +270,14 @@
               bind:value={description}
               placeholder="Describe this link..."
               rows="3"
-              class="w-full px-4 py-3 bg-gray-50 focus:outline-none dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 resize-none"
+              class="w-full px-4 py-3 bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-brand-orange-500/50 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 resize-none"
             ></textarea>
           </div>
         </div>
       </div>
 
       <!-- Organization Section -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+      <div class="bg-white dark:bg-[#111827] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-white/5">
         <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
           Organization (Optional)
         </h2>
@@ -293,7 +294,7 @@
               <select
                 id="folder"
                 bind:value={folderId}
-                class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent text-gray-900 dark:text-white"
+                class="w-full px-4 py-3 bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-brand-orange-500/50 focus:border-transparent text-gray-900 dark:text-white"
               >
                 <option value={null}>No Folder</option>
                 {#each folders as folder}
@@ -306,7 +307,7 @@
           </div>
 
           <!-- Tags Selector (will auto-load existing tags) -->
-          <TagSelector 
+          <TagSelector
             bind:selectedTags={selectedTags}
             linkId={link.id}
           />
@@ -314,7 +315,7 @@
       </div>
 
       <!-- Advanced Options -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div class="bg-white dark:bg-[#111827] rounded-3xl shadow-sm border border-gray-100 dark:border-white/5 overflow-hidden">
         <button
           type="button"
           onclick={() => isAdvancedOpen = !isAdvancedOpen}
@@ -323,25 +324,22 @@
           <h2 class="text-lg font-bold text-gray-900 dark:text-white">
             Advanced Options
           </h2>
-          <svg
-            class="w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform duration-200"
-            class:rotate-180={isAdvancedOpen}
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
-          </svg>
+          <Icon
+            name="chevron-down"
+            size={20}
+            class={isAdvancedOpen ? 'rotate-180 text-gray-500 dark:text-gray-400' : 'text-gray-500 dark:text-gray-400'}
+          />
         </button>
 
         {#if isAdvancedOpen}
-          <div class="px-6 pb-6 space-y-4 border-t border-gray-200 dark:border-gray-700 pt-4">
+          <div class="px-6 pb-6 space-y-4 border-t border-gray-100 dark:border-white/5 pt-4">
             <!-- Link Status Toggle -->
             <div>
               <label class="flex items-center justify-between cursor-pointer">
                 <div>
                   <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Link Status</span>
                   <p class="text-sm text-gray-500 dark:text-gray-400">
-                    {isActive ? 'Link aktif dan dapat diakses' : 'Link nonaktif, redirect akan ditolak'}
+                    {isActive ? 'Link is active and accessible' : 'Link is inactive, redirects will be rejected'}
                   </p>
                 </div>
                 <div class="relative">
@@ -350,7 +348,7 @@
                     bind:checked={isActive}
                     class="sr-only peer"
                   />
-                  <div class="w-14 h-7 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#FF6B35]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[#FF6B35]"></div>
+                  <div class="w-14 h-7 bg-gray-200 dark:bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-brand-orange-500/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-brand-orange-500"></div>
                 </div>
               </label>
             </div>
@@ -364,32 +362,35 @@
                 <button
                   type="button"
                   onclick={() => rotationMethod = 'random'}
-                  class="px-4 py-3 rounded-lg border-2 transition-all duration-200 {rotationMethod === 'random' ? 'border-[#FF6B35] bg-[#FF6B35]/10 text-[#FF6B35] font-semibold' : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-gray-400'}"
+                  class="px-4 py-3 rounded-xl border-2 transition-all duration-200 flex items-center justify-center gap-2 {rotationMethod === 'random' ? 'border-brand-orange-500 bg-brand-orange-500/10 text-brand-orange-500 font-semibold' : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-gray-400'}"
                 >
-                  🎲 Random
+                  <Icon name="sparkles" size={20} />
+                  Random
                 </button>
                 <button
                   type="button"
                   onclick={() => rotationMethod = 'sequential'}
-                  class="px-4 py-3 rounded-lg border-2 transition-all duration-200 {rotationMethod === 'sequential' ? 'border-[#FF6B35] bg-[#FF6B35]/10 text-[#FF6B35] font-semibold' : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-gray-400'}"
+                  class="px-4 py-3 rounded-xl border-2 transition-all duration-200 flex items-center justify-center gap-2 {rotationMethod === 'sequential' ? 'border-brand-orange-500 bg-brand-orange-500/10 text-brand-orange-500 font-semibold' : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-gray-400'}"
                 >
-                  ➡️ Sequential
+                  <Icon name="arrow-right" size={20} />
+                  Sequential
                 </button>
                 <button
                   type="button"
                   onclick={() => rotationMethod = 'weighted'}
-                  class="px-4 py-3 rounded-lg border-2 transition-all duration-200 {rotationMethod === 'weighted' ? 'border-[#FF6B35] bg-[#FF6B35]/10 text-[#FF6B35] font-semibold' : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-gray-400'}"
+                  class="px-4 py-3 rounded-xl border-2 transition-all duration-200 flex items-center justify-center gap-2 {rotationMethod === 'weighted' ? 'border-brand-orange-500 bg-brand-orange-500/10 text-brand-orange-500 font-semibold' : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-gray-400'}"
                 >
-                  ⚖️ Weighted
+                  <Icon name="target" size={20} />
+                  Weighted
                 </button>
               </div>
               <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
                 {#if rotationMethod === 'random'}
-                  Redirect ke URL secara acak setiap kali diklik
+                  Redirect to URLs randomly on each click
                 {:else if rotationMethod === 'sequential'}
-                  Redirect ke URL secara berurutan (round-robin)
+                  Redirect to URLs in order (round-robin)
                 {:else}
-                  Redirect berdasarkan bobot yang ditentukan
+                  Redirect based on assigned weights
                 {/if}
               </p>
             </div>
@@ -403,13 +404,16 @@
                 type="password"
                 bind:value={password}
                 placeholder={link.password ? "Enter new password to change" : "Leave empty for no password"}
-                class="w-full px-4 py-3 bg-gray-50 focus:outline-none dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                class="w-full px-4 py-3 bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-brand-orange-500/50 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
               />
               <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
                 {#if link.password}
-                  ⚠️ Link ini sudah memiliki password. Isi field ini untuk mengubahnya.
+                  <span class="flex items-center gap-1">
+                    <Icon name="alert-triangle" size={16} class="text-brand-orange-500" />
+                    This link already has a password. Fill this field to change it.
+                  </span>
                 {:else}
-                  User harus memasukkan password sebelum redirect
+                  Users must enter a password before being redirected
                 {/if}
               </p>
             </div>
@@ -422,10 +426,10 @@
               <input
                 type="datetime-local"
                 bind:value={expiresAt}
-                class="w-full px-4 py-3 bg-gray-50 focus:outline-none dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent text-gray-900 dark:text-white"
+                class="w-full px-4 py-3 bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-brand-orange-500/50 focus:border-transparent text-gray-900 dark:text-white"
               />
               <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                Link akan otomatis nonaktif setelah tanggal ini
+                Link will automatically expire after this date
               </p>
             </div>
 
@@ -439,13 +443,14 @@
                 bind:value={maxClicks}
                 min="1"
                 placeholder="Unlimited"
-                class="w-full px-4 py-3 bg-gray-50 focus:outline-none dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+                class="w-full px-4 py-3 bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-brand-orange-500/50 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
               />
               <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                Link akan otomatis nonaktif setelah mencapai jumlah klik ini
+                Link will automatically expire after reaching this click count
                 {#if link.max_clicks}
                   <br />
-                  <span class="text-[#FF6B35] font-semibold">
+                  <span class="text-brand-orange-500 font-semibold flex items-center gap-1 mt-1">
+                    <Icon name="info" size={16} />
                     Current: {link.click_count}/{link.max_clicks} clicks
                   </span>
                 {/if}
@@ -460,23 +465,20 @@
         <a
           href="/links"
           use:inertia
-          class="w-full sm:flex-1 px-6 py-4 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200 font-semibold text-center"
+          class="w-full sm:flex-1 px-6 py-4 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 font-semibold text-center flex items-center justify-center gap-2"
         >
-          Batal
+          <Icon name="x" size={20} />
+          Cancel
         </a>
         <button
           type="submit"
-          class="w-full sm:flex-1 px-6 py-4 bg-gradient-to-r from-[#FF6B35] to-[#ff5722] text-white rounded-lg hover:shadow-lg transition-all duration-200 font-semibold"
+          class="w-full sm:flex-1 px-6 py-4 bg-brand-orange-500 hover:bg-brand-orange-600 text-white rounded-xl shadow-md shadow-brand-orange-500/20 active:scale-[0.98] transition-all duration-200 font-semibold flex items-center justify-center gap-2"
         >
-          💾 Simpan Perubahan
+          <Icon name="save" size={20} />
+          Save Changes
         </button>
       </div>
     </form>
   </main>
 </div>
 
-<style>
-  .rotate-180 {
-    transform: rotate(180deg);
-  }
-</style>

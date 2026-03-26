@@ -1,21 +1,22 @@
 <script>
   import { inertia, router } from '@inertiajs/svelte';
   import AppHeader from '../../Components/AppHeader.svelte';
+  import Icon from '../../Components/Icon.svelte';
   import { Toast } from '../../Components/helper.js';
 
-  let { 
-    user, 
+  let {
+    user,
     link,
-    stats, 
-    clicksOverTime, 
-    deviceBreakdown, 
+    stats,
+    clicksOverTime,
+    deviceBreakdown,
     browserBreakdown,
     osBreakdown,
-    referrers, 
+    referrers,
     countryBreakdown,
     cityBreakdown,
     recentClicks,
-    dateRange 
+    dateRange
   } = $props();
 
   let selectedDays = $state(dateRange.days);
@@ -35,13 +36,13 @@
 
   function formatDate(dateString) {
     const date = new Date(dateString);
-    return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+    return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
   }
 
   function formatDateTime(timestamp) {
     const date = new Date(timestamp);
-    return date.toLocaleString('id-ID', { 
-      day: 'numeric', 
+    return date.toLocaleString('en-US', {
+      day: 'numeric',
       month: 'short',
       hour: '2-digit',
       minute: '2-digit'
@@ -51,9 +52,9 @@
   async function copyToClipboard() {
     try {
       await navigator.clipboard.writeText(`https://klikaja.app/${link.alias}`);
-      Toast('Link berhasil disalin!', 'success');
+      Toast('Link copied successfully!', 'success');
     } catch (error) {
-      Toast('Gagal menyalin link', 'error');
+      Toast('Failed to copy link', 'error');
     }
   }
 
@@ -67,21 +68,18 @@
 
   async function generateQR() {
     if (isGeneratingQR) return;
-    
+
     isGeneratingQR = true;
     const url = `https://klikaja.app/${link.alias}`;
-    
+
     try {
-      // Primary: Use QR Server API (zero bundle size)
       const apiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&format=png&margin=10&data=${encodeURIComponent(url)}`;
-      
-      // Test if image loads successfully
+
       const img = new Image();
       img.crossOrigin = 'anonymous';
-      
+
       await new Promise((resolve, reject) => {
         img.onload = () => {
-          // Convert to data URL for download support
           const canvas = document.createElement('canvas');
           canvas.width = 400;
           canvas.height = 400;
@@ -93,11 +91,11 @@
         img.onerror = reject;
         img.src = apiUrl;
       });
-      
+
       showQRModal = true;
     } catch (error) {
       console.error('QR generation failed:', error);
-      Toast('Gagal generate QR code', 'error');
+      Toast('Failed to generate QR code', 'error');
     } finally {
       isGeneratingQR = false;
     }
@@ -108,26 +106,36 @@
     downloadLink.download = `qr-klikaja-${link.alias}.png`;
     downloadLink.href = qrCodeDataURL;
     downloadLink.click();
-    Toast('QR Code berhasil didownload!', 'success');
+    Toast('QR Code downloaded successfully!', 'success');
   }
 
   function getDeviceIcon(device) {
     switch(device?.toLowerCase()) {
-      case 'mobile': return '📱';
-      case 'desktop': return '💻';
-      case 'tablet': return '📱';
-      case 'bot': return '🤖';
-      default: return '❓';
+      case 'mobile': return 'smartphone';
+      case 'desktop': return 'monitor';
+      case 'tablet': return 'tablet';
+      case 'bot': return 'cpu';
+      default: return 'help-circle';
     }
   }
 
   function getDeviceColor(device) {
     switch(device?.toLowerCase()) {
-      case 'mobile': return '#FF6B35';
-      case 'desktop': return '#004E89';
-      case 'tablet': return '#00D9FF';
-      case 'bot': return '#FFB800';
-      default: return '#gray';
+      case 'mobile': return '#f97316';
+      case 'desktop': return '#2563eb';
+      case 'tablet': return '#06b6d4';
+      case 'bot': return '#f59e0b';
+      default: return '#6b7280';
+    }
+  }
+
+  function getDeviceBgColor(device) {
+    switch(device?.toLowerCase()) {
+      case 'mobile': return 'bg-orange-500';
+      case 'desktop': return 'bg-blue-600';
+      case 'tablet': return 'bg-cyan-500';
+      case 'bot': return 'bg-amber-500';
+      default: return 'bg-gray-500';
     }
   }
 
@@ -146,15 +154,13 @@
         use:inertia
         class="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-4"
       >
-        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
-        Kembali ke Dashboard
+        <Icon name="arrow-left" size={20} />
+        Back to Dashboard
       </a>
     </div>
 
     <!-- Link Info Card -->
-    <div class="bg-gradient-to-r from-[#FF6B35]/10 to-[#004E89]/10 dark:from-[#FF6B35]/20 dark:to-[#004E89]/20 rounded-xl p-6 mb-8 border border-[#FF6B35]/20">
+    <div class="bg-gradient-to-r from-brand-orange-500/10 to-blue-600/10 dark:from-brand-orange-500/20 dark:to-blue-600/20 rounded-3xl p-6 mb-8 border border-brand-orange-500/20">
       <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div class="flex-1">
           <div class="flex items-center gap-3 mb-2">
@@ -162,10 +168,10 @@
               klikaja.app/{link.alias}
             </h1>
             <span class="px-3 py-1 rounded-full text-xs font-semibold {link.is_active ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400'}">
-              {link.is_active ? '✓ Active' : '✗ Inactive'}
+              {link.is_active ? 'Active' : 'Inactive'}
             </span>
           </div>
-          
+
           {#if link.title}
             <p class="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
               {link.title}
@@ -173,48 +179,53 @@
           {/if}
 
           <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">
-            → {Array.isArray(link.urls) ? link.urls[0].url || link.urls[0] : link.urls}
+            <Icon name="arrow-right" size={14} class="inline mr-1" />
+            {Array.isArray(link.urls) ? link.urls[0].url || link.urls[0] : link.urls}
             {#if Array.isArray(link.urls) && link.urls.length > 1}
-              <span class="text-[#FF6B35] font-semibold">+{link.urls.length - 1} more</span>
+              <span class="text-brand-orange-500 font-semibold">+{link.urls.length - 1} more</span>
             {/if}
           </p>
 
           <div class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-            <span>Total: {link.click_count} clicks</span>
+            <span class="flex items-center gap-1">
+              <Icon name="mouse-pointer-2" size={14} />
+              Total: {link.click_count} clicks
+            </span>
             <span>•</span>
-            <span>Created: {formatDate(link.created_at)}</span>
+            <span class="flex items-center gap-1">
+              <Icon name="calendar" size={14} />
+              Created: {formatDate(link.created_at)}
+            </span>
           </div>
         </div>
 
         <div class="flex gap-2">
           <button
             onclick={copyToClipboard}
-            class="px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium"
+            class="px-4 py-2 bg-white dark:bg-[#111827] text-gray-700 dark:text-gray-300 border border-gray-100 dark:border-white/5 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium flex items-center gap-2"
           >
-            📋 Copy Link
+            <Icon name="copy" size={18} />
+            Copy Link
           </button>
           <button
             onclick={generateQR}
             disabled={isGeneratingQR}
-            class="px-4 py-2 bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white rounded-lg hover:shadow-lg transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-xl hover:shadow-lg transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             {#if isGeneratingQR}
-              <span class="flex items-center gap-2">
-                <svg class="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Generating...
-              </span>
+              <Icon name="loader" size={18} class="animate-spin" />
+              Generating...
             {:else}
-              🎯 QR Code
+              <Icon name="qr-code" size={18} />
+              QR Code
             {/if}
           </button>
           <button
             onclick={exportCSV}
-            class="px-4 py-2 bg-[#FF6B35] text-white rounded-lg hover:bg-[#ff5722] transition-colors font-medium"
+            class="px-4 py-2 bg-brand-orange-500 text-white rounded-xl hover:bg-brand-orange-600 transition-colors font-medium flex items-center gap-2"
           >
-            📥 Export CSV
+            <Icon name="download" size={18} />
+            Export CSV
           </button>
         </div>
       </div>
@@ -224,20 +235,23 @@
     <div class="flex justify-end gap-2 mb-6">
       <button
         onclick={() => changeDateRange(7)}
-        class="px-4 py-2 rounded-lg font-medium transition-colors {selectedDays === 7 ? 'bg-[#FF6B35] text-white' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'}"
+        class="px-4 py-2 rounded-xl font-medium transition-colors flex items-center gap-2 {selectedDays === 7 ? 'bg-brand-orange-500 text-white' : 'bg-white dark:bg-[#111827] text-gray-700 dark:text-gray-300 border border-gray-100 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-gray-700'}"
       >
+        <Icon name="calendar" size={16} />
         7 Days
       </button>
       <button
         onclick={() => changeDateRange(30)}
-        class="px-4 py-2 rounded-lg font-medium transition-colors {selectedDays === 30 ? 'bg-[#FF6B35] text-white' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'}"
+        class="px-4 py-2 rounded-xl font-medium transition-colors flex items-center gap-2 {selectedDays === 30 ? 'bg-brand-orange-500 text-white' : 'bg-white dark:bg-[#111827] text-gray-700 dark:text-gray-300 border border-gray-100 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-gray-700'}"
       >
+        <Icon name="calendar" size={16} />
         30 Days
       </button>
       <button
         onclick={() => changeDateRange(90)}
-        class="px-4 py-2 rounded-lg font-medium transition-colors {selectedDays === 90 ? 'bg-[#FF6B35] text-white' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'}"
+        class="px-4 py-2 rounded-xl font-medium transition-colors flex items-center gap-2 {selectedDays === 90 ? 'bg-brand-orange-500 text-white' : 'bg-white dark:bg-[#111827] text-gray-700 dark:text-gray-300 border border-gray-100 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-gray-700'}"
       >
+        <Icon name="calendar" size={16} />
         90 Days
       </button>
     </div>
@@ -245,10 +259,12 @@
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
       <!-- Total Clicks -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+      <div class="bg-white dark:bg-[#111827] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-white/5">
         <div class="flex items-center justify-between mb-2">
           <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Clicks</span>
-          <span class="text-2xl">👆</span>
+          <div class="w-10 h-10 bg-gradient-to-br from-brand-orange-500 to-brand-orange-400 rounded-xl flex items-center justify-center">
+            <Icon name="mouse-pointer-2" size={20} color="#ffffff" />
+          </div>
         </div>
         <p class="text-3xl font-bold text-gray-900 dark:text-white mb-1">
           {formatNumber(stats.totalClicks)}
@@ -259,10 +275,12 @@
       </div>
 
       <!-- Unique Visitors -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+      <div class="bg-white dark:bg-[#111827] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-white/5">
         <div class="flex items-center justify-between mb-2">
           <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Unique Visitors</span>
-          <span class="text-2xl">👥</span>
+          <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-400 rounded-xl flex items-center justify-center">
+            <Icon name="users" size={20} color="#ffffff" />
+          </div>
         </div>
         <p class="text-3xl font-bold text-gray-900 dark:text-white mb-1">
           {formatNumber(stats.uniqueVisitors)}
@@ -273,10 +291,12 @@
       </div>
 
       <!-- Click Through Rate -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+      <div class="bg-white dark:bg-[#111827] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-white/5">
         <div class="flex items-center justify-between mb-2">
           <span class="text-sm font-medium text-gray-600 dark:text-gray-400">CTR</span>
-          <span class="text-2xl">📈</span>
+          <div class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-cyan-400 rounded-xl flex items-center justify-center">
+            <Icon name="trending-up" size={20} color="#ffffff" />
+          </div>
         </div>
         <p class="text-3xl font-bold text-gray-900 dark:text-white mb-1">
           {stats.clickThroughRate}%
@@ -290,11 +310,14 @@
     <!-- Charts Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
       <!-- Clicks Over Time Chart -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
-          📈 Clicks Over Time
+      <div class="bg-white dark:bg-[#111827] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-white/5">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <div class="w-10 h-10 bg-gradient-to-br from-brand-orange-500 to-brand-orange-400 rounded-xl flex items-center justify-center">
+            <Icon name="activity" size={20} color="#ffffff" />
+          </div>
+          Clicks Over Time
         </h3>
-        
+
         {#if clicksOverTime.length > 0}
           <div class="space-y-2">
             {#each clicksOverTime as day}
@@ -303,8 +326,8 @@
                   {formatDate(day.date)}
                 </span>
                 <div class="flex-1 bg-gray-100 dark:bg-gray-700 rounded-full h-8 relative overflow-hidden">
-                  <div 
-                    class="bg-gradient-to-r from-[#FF6B35] to-[#ff5722] h-full rounded-full flex items-center justify-end pr-3 transition-all duration-500"
+                  <div
+                    class="bg-gradient-to-r from-brand-orange-500 to-brand-orange-400 h-full rounded-full flex items-center justify-end pr-3 transition-all duration-500"
                     style="width: {(day.clicks / maxClicks) * 100}%"
                   >
                     {#if day.clicks > 0}
@@ -318,18 +341,22 @@
             {/each}
           </div>
         {:else}
-          <div class="text-center py-12 text-gray-500 dark:text-gray-400">
-            <p>Belum ada data clicks</p>
+          <div class="w-20 h-20 bg-gradient-to-br from-brand-orange-100 to-brand-orange-50 dark:from-brand-orange-900/20 dark:to-brand-orange-800/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Icon name="bar-chart-3" size={48} class="opacity-50 text-brand-orange-500" />
           </div>
+          <p class="text-center text-gray-500 dark:text-gray-400">No clicks data yet</p>
         {/if}
       </div>
 
       <!-- Device Breakdown -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
-          📱 Device Breakdown
+      <div class="bg-white dark:bg-[#111827] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-white/5">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <div class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-cyan-400 rounded-xl flex items-center justify-center">
+            <Icon name="smartphone" size={20} color="#ffffff" />
+          </div>
+          Device Breakdown
         </h3>
-        
+
         {#if deviceBreakdown.length > 0}
           <div class="space-y-3">
             {#each deviceBreakdown as device}
@@ -337,7 +364,9 @@
               <div>
                 <div class="flex items-center justify-between mb-2">
                   <div class="flex items-center gap-2">
-                    <span class="text-xl">{getDeviceIcon(device.device_type)}</span>
+                    <div class="w-8 h-8 bg-gradient-to-br from-gray-400 to-gray-300 rounded-xl flex items-center justify-center">
+                      <Icon name={getDeviceIcon(device.device_type)} size={18} color="#ffffff" />
+                    </div>
                     <span class="text-sm font-medium text-gray-700 dark:text-gray-300 capitalize">
                       {device.device_type}
                     </span>
@@ -352,18 +381,19 @@
                   </div>
                 </div>
                 <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2">
-                  <div 
-                    class="h-2 rounded-full transition-all duration-500"
-                    style="width: {percentage}%; background-color: {getDeviceColor(device.device_type)}"
+                  <div
+                    class="h-2 rounded-full transition-all duration-500 {getDeviceBgColor(device.device_type)}"
+                    style="width: {percentage}%"
                   ></div>
                 </div>
               </div>
             {/each}
           </div>
         {:else}
-          <div class="text-center py-12 text-gray-500 dark:text-gray-400">
-            <p>Belum ada data device</p>
+          <div class="w-20 h-20 bg-gradient-to-br from-brand-orange-100 to-brand-orange-50 dark:from-brand-orange-900/20 dark:to-brand-orange-800/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Icon name="smartphone" size={48} class="opacity-50 text-brand-orange-500" />
           </div>
+          <p class="text-center text-gray-500 dark:text-gray-400">No device data yet</p>
         {/if}
       </div>
     </div>
@@ -371,15 +401,18 @@
     <!-- Additional Stats Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
       <!-- Top Referrers -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
-          🔗 Top Referrers
+      <div class="bg-white dark:bg-[#111827] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-white/5">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-400 rounded-xl flex items-center justify-center">
+            <Icon name="link" size={20} color="#ffffff" />
+          </div>
+          Top Referrers
         </h3>
-        
+
         {#if referrers.length > 0}
           <div class="space-y-2">
             {#each referrers as referrer}
-              <div class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+              <div class="flex items-center justify-between p-2 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700">
                 <span class="text-sm text-gray-700 dark:text-gray-300 truncate flex-1">
                   {referrer.referrer}
                 </span>
@@ -390,22 +423,26 @@
             {/each}
           </div>
         {:else}
-          <div class="text-center py-8 text-gray-500 dark:text-gray-400">
-            <p>Belum ada data</p>
+          <div class="w-20 h-20 bg-gradient-to-br from-brand-orange-100 to-brand-orange-50 dark:from-brand-orange-900/20 dark:to-brand-orange-800/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Icon name="link" size={48} class="opacity-50 text-brand-orange-500" />
           </div>
+          <p class="text-center text-gray-500 dark:text-gray-400">No referrer data yet</p>
         {/if}
       </div>
 
       <!-- Top Countries -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
-          🌍 Top Countries
+      <div class="bg-white dark:bg-[#111827] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-white/5">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-400 rounded-xl flex items-center justify-center">
+            <Icon name="globe" size={20} color="#ffffff" />
+          </div>
+          Top Countries
         </h3>
-        
+
         {#if countryBreakdown.length > 0}
           <div class="space-y-2">
             {#each countryBreakdown as country}
-              <div class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+              <div class="flex items-center justify-between p-2 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700">
                 <span class="text-sm text-gray-700 dark:text-gray-300">
                   {country.country || 'Unknown'}
                 </span>
@@ -416,22 +453,26 @@
             {/each}
           </div>
         {:else}
-          <div class="text-center py-8 text-gray-500 dark:text-gray-400">
-            <p>Belum ada data</p>
+          <div class="w-20 h-20 bg-gradient-to-br from-brand-orange-100 to-brand-orange-50 dark:from-brand-orange-900/20 dark:to-brand-orange-800/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Icon name="globe" size={48} class="opacity-50 text-brand-orange-500" />
           </div>
+          <p class="text-center text-gray-500 dark:text-gray-400">No country data yet</p>
         {/if}
       </div>
 
       <!-- Top Cities -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
-          🏙️ Top Cities
+      <div class="bg-white dark:bg-[#111827] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-white/5">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <div class="w-10 h-10 bg-gradient-to-br from-brand-orange-500 to-brand-orange-400 rounded-xl flex items-center justify-center">
+            <Icon name="map-pin" size={20} color="#ffffff" />
+          </div>
+          Top Cities
         </h3>
-        
+
         {#if cityBreakdown.length > 0}
           <div class="space-y-2">
             {#each cityBreakdown as city}
-              <div class="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
+              <div class="flex items-center justify-between p-2 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700">
                 <span class="text-sm text-gray-700 dark:text-gray-300 truncate flex-1">
                   {city.city || 'Unknown'}, {city.country || '?'}
                 </span>
@@ -442,9 +483,10 @@
             {/each}
           </div>
         {:else}
-          <div class="text-center py-8 text-gray-500 dark:text-gray-400">
-            <p>Belum ada data</p>
+          <div class="w-20 h-20 bg-gradient-to-br from-brand-orange-100 to-brand-orange-50 dark:from-brand-orange-900/20 dark:to-brand-orange-800/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Icon name="map-pin" size={48} class="opacity-50 text-brand-orange-500" />
           </div>
+          <p class="text-center text-gray-500 dark:text-gray-400">No city data yet</p>
         {/if}
       </div>
     </div>
@@ -452,11 +494,14 @@
     <!-- Browser & OS Stats -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
       <!-- Browser Breakdown -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
-          🌐 Browser Breakdown
+      <div class="bg-white dark:bg-[#111827] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-white/5">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <div class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-cyan-400 rounded-xl flex items-center justify-center">
+            <Icon name="globe" size={20} color="#ffffff" />
+          </div>
+          Browser Breakdown
         </h3>
-        
+
         {#if browserBreakdown.length > 0}
           <div class="space-y-2">
             {#each browserBreakdown as browser}
@@ -477,18 +522,22 @@
             {/each}
           </div>
         {:else}
-          <div class="text-center py-8 text-gray-500 dark:text-gray-400">
-            <p>Belum ada data</p>
+          <div class="w-20 h-20 bg-gradient-to-br from-brand-orange-100 to-brand-orange-50 dark:from-brand-orange-900/20 dark:to-brand-orange-800/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Icon name="globe" size={48} class="opacity-50 text-brand-orange-500" />
           </div>
+          <p class="text-center text-gray-500 dark:text-gray-400">No browser data yet</p>
         {/if}
       </div>
 
       <!-- OS Breakdown -->
-      <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
-          💻 Operating System
+      <div class="bg-white dark:bg-[#111827] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-white/5">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-400 rounded-xl flex items-center justify-center">
+            <Icon name="monitor" size={20} color="#ffffff" />
+          </div>
+          Operating System
         </h3>
-        
+
         {#if osBreakdown.length > 0}
           <div class="space-y-2">
             {#each osBreakdown as os}
@@ -509,24 +558,28 @@
             {/each}
           </div>
         {:else}
-          <div class="text-center py-8 text-gray-500 dark:text-gray-400">
-            <p>Belum ada data</p>
+          <div class="w-20 h-20 bg-gradient-to-br from-brand-orange-100 to-brand-orange-50 dark:from-brand-orange-900/20 dark:to-brand-orange-800/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Icon name="monitor" size={48} class="opacity-50 text-brand-orange-500" />
           </div>
+          <p class="text-center text-gray-500 dark:text-gray-400">No OS data yet</p>
         {/if}
       </div>
     </div>
 
     <!-- Recent Clicks Table -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
-      <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
-        🕐 Recent Clicks
+    <div class="bg-white dark:bg-[#111827] rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-white/5">
+      <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+        <div class="w-10 h-10 bg-gradient-to-br from-brand-orange-500 to-brand-orange-400 rounded-xl flex items-center justify-center">
+          <Icon name="clock" size={20} color="#ffffff" />
+        </div>
+        Recent Clicks
       </h3>
-      
+
       {#if recentClicks.length > 0}
         <div class="overflow-x-auto">
           <table class="w-full">
             <thead>
-              <tr class="border-b border-gray-200 dark:border-gray-700">
+              <tr class="border-b border-gray-100 dark:border-gray-700">
                 <th class="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">Time</th>
                 <th class="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">Device</th>
                 <th class="text-left py-3 px-4 text-sm font-semibold text-gray-700 dark:text-gray-300">Browser</th>
@@ -543,7 +596,7 @@
                   </td>
                   <td class="py-3 px-4 text-sm text-gray-900 dark:text-white">
                     <span class="flex items-center gap-2">
-                      {getDeviceIcon(click.device_type)}
+                      <Icon name={getDeviceIcon(click.device_type)} size={16} color={getDeviceColor(click.device_type)} />
                       <span class="capitalize">{click.device_type}</span>
                     </span>
                   </td>
@@ -565,9 +618,10 @@
           </table>
         </div>
       {:else}
-        <div class="text-center py-12 text-gray-500 dark:text-gray-400">
-          <p>Belum ada clicks</p>
+        <div class="w-20 h-20 bg-gradient-to-br from-brand-orange-100 to-brand-orange-50 dark:from-brand-orange-900/20 dark:to-brand-orange-800/20 rounded-full flex items-center justify-center mx-auto mb-6">
+          <Icon name="clock" size={48} class="opacity-50 text-brand-orange-500" />
         </div>
+        <p class="text-center text-gray-500 dark:text-gray-400">No clicks yet</p>
       {/if}
     </div>
   </main>
@@ -575,39 +629,42 @@
 
 <!-- QR Code Modal -->
 {#if showQRModal}
-  <div 
-    class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" 
+  <div
+    class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
     role="dialog"
     aria-modal="true"
     onclick={() => showQRModal = false}
     onkeydown={(e) => e.key === 'Escape' && (showQRModal = false)}
   >
-    <div 
-      class="bg-white dark:bg-gray-800 rounded-2xl p-8 max-w-md w-full shadow-2xl" 
+    <div
+      class="bg-white dark:bg-[#111827] rounded-3xl p-8 max-w-md w-full shadow-2xl"
       role="document"
       onclick={(e) => e.stopPropagation()}
     >
       <!-- Header -->
       <div class="flex items-center justify-between mb-6">
-        <h3 class="text-2xl font-bold text-gray-900 dark:text-white">QR Code</h3>
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <div class="w-10 h-10 bg-gradient-to-br from-brand-orange-500 to-brand-orange-400 rounded-xl flex items-center justify-center">
+            <Icon name="qr-code" size={28} color="#ffffff" />
+          </div>
+          QR Code
+        </h3>
         <button
           onclick={() => showQRModal = false}
           aria-label="Close modal"
-          class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+          class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
         >
-          <svg class="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <Icon name="x" size={24} class="text-gray-500" />
         </button>
       </div>
 
       <!-- QR Code Display -->
-      <div class="bg-white p-6 rounded-xl border-2 border-gray-200 dark:border-gray-700 mb-6">
+      <div class="bg-white p-6 rounded-xl border-2 border-gray-100 dark:border-gray-700 mb-6">
         <img src={qrCodeDataURL} alt="QR Code" class="w-full h-auto" />
       </div>
 
       <!-- Link Info -->
-      <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-900/50 rounded-lg">
+      <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-900/50 rounded-xl">
         <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Short Link:</p>
         <p class="text-lg font-semibold text-gray-900 dark:text-white break-all">
           klikaja.app/{link.alias}
@@ -618,21 +675,23 @@
       <div class="flex gap-3">
         <button
           onclick={downloadQR}
-          class="flex-1 px-6 py-3 bg-gradient-to-r from-[#6366F1] to-[#8B5CF6] text-white rounded-lg hover:shadow-lg transition-all font-semibold"
+          class="flex-1 px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-xl hover:shadow-lg transition-all font-semibold flex items-center justify-center gap-2"
         >
-          📥 Download PNG
+          <Icon name="download" size={20} />
+          Download PNG
         </button>
         <button
           onclick={() => showQRModal = false}
-          class="px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors font-semibold"
+          class="px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors font-semibold"
         >
           Close
         </button>
       </div>
 
       <!-- Tip -->
-      <p class="mt-4 text-xs text-center text-gray-500 dark:text-gray-400">
-        💡 Scan QR code ini untuk langsung mengakses link
+      <p class="mt-4 text-xs text-center text-gray-500 dark:text-gray-400 flex items-center justify-center gap-2">
+        <Icon name="info" size={14} />
+        Scan this QR code to instantly access the link
       </p>
     </div>
   </div>

@@ -1,8 +1,9 @@
 <script>
   import { router } from '@inertiajs/svelte';
   import KlikAjaLogo from '../../Components/KlikAjaLogo.svelte';
+  import Icon from '../../Components/Icon.svelte';
   import axios from 'axios';
-  
+
   let url = $state('');
   let customAlias = $state('');
   let isLoading = $state(false);
@@ -10,13 +11,13 @@
   let aliasAvailable = $state(null);
   let debounceTimer;
   let mobileMenuOpen = $state(false);
-  
+
   // Advanced settings
   let isAdvancedOpen = $state(false);
   let password = $state('');
   let expiresAt = $state('');
   let maxClicks = $state('');
-  
+
   // Debounce alias check
   async function checkAliasAvailability(alias) {
     if (!alias || alias.trim() === '') {
@@ -25,7 +26,7 @@
     }
 
     isCheckingAlias = true;
-    
+
     try {
       const response = await axios.get(`/api/alias/check/${alias}`);
       aliasAvailable = response.data.available;
@@ -48,14 +49,14 @@
       aliasAvailable = null;
     }
   });
-  
+
   function handleShorten(e) {
     e.preventDefault();
     if (!url) return;
     if (customAlias && aliasAvailable === false) {
-      return; // Don't submit if alias is taken
+      return;
     }
-    
+
     isLoading = true;
     router.post('/shorten', {
       url: url,
@@ -69,948 +70,440 @@
       }
     });
   }
-  
+
   // Features data
   const features = [
     {
-      icon: '⚡',
-      title: 'Instant & No Login Required',
-      description: 'Perpendek link dalam 1 detik tanpa registrasi. Klaim ownership nanti jika perlu!'
+      icon: 'zap',
+      title: 'Instant & Seamless',
+      description: 'Shorten links in seconds without registration. Claim ownership later if needed.',
+      iconBg: 'bg-orange-50 dark:bg-orange-500/10',
+      iconColor: 'text-orange-600 dark:text-orange-400',
     },
     {
-      icon: '🔄',
-      title: 'Smart Link Rotation (3 Methods!)',
-      description: 'Sequential, Random, atau Weighted rotation - Perfect untuk A/B testing & load balancing'
+      icon: 'rotate-cw',
+      title: 'Smart Link Rotation',
+      description: 'Sequential, Random, or Weighted rotation. Perfect for robust A/B tests.',
+      iconBg: 'bg-blue-50 dark:bg-blue-500/10',
+      iconColor: 'text-blue-600 dark:text-blue-400',
     },
     {
-      icon: '📊',
-      title: 'Deep Analytics Dashboard',
-      description: 'Track clicks, geo-location, devices, browsers, OS, dan referrers secara real-time'
+      icon: 'bar-chart-3',
+      title: 'Deep Analytics',
+      description: 'Track clicks, geolocation, devices, and referrers with professional dashboards.',
+      iconBg: 'bg-cyan-50 dark:bg-cyan-500/10',
+      iconColor: 'text-cyan-600 dark:text-cyan-400',
     },
     {
-      icon: '🎨',
+      icon: 'sparkles',
       title: 'Custom Branded Links',
-      description: 'Buat link memorable: klikaja.app/promo-ramadan, klikaja.app/diskon50'
+      description: 'Create memorable short URLs like klikaja.app/promo-summer quickly.',
+      iconBg: 'bg-purple-50 dark:bg-purple-500/10',
+      iconColor: 'text-purple-600 dark:text-purple-400',
     },
     {
-      icon: '🔒',
-      title: 'Password & Expiration Control',
-      description: 'Lindungi link dengan password, set expiration date, dan limit maksimal klik'
+      icon: 'shield',
+      title: 'Secure & Protected',
+      description: 'Safeguard links with passwords, set precise expirations, and limit click counts.',
+      iconBg: 'bg-emerald-50 dark:bg-emerald-500/10',
+      iconColor: 'text-emerald-600 dark:text-emerald-400',
     },
     {
-      icon: '📱',
+      icon: 'qr-code',
       title: 'Auto QR Code Generator',
-      description: 'Setiap link otomatis dapat QR code berkualitas tinggi. Download & share instantly!'
+      description: 'Every URL automatically receives a high-quality QR code. Ready to print.',
+      iconBg: 'bg-amber-50 dark:bg-amber-500/10',
+      iconColor: 'text-amber-600 dark:text-amber-400',
     },
     {
-      icon: '💯',
-      title: '100% Open Source (MIT)',
-      description: 'Self-host unlimited GRATIS atau gunakan hosted version. Kode transparan & dapat diaudit'
+      icon: 'code',
+      title: '100% Open Source',
+      description: 'Transparent and auditable code. Hosted reliably or absolutely free to self-host.',
+      iconBg: 'bg-gray-100 dark:bg-gray-800',
+      iconColor: 'text-gray-700 dark:text-gray-300',
     },
     {
-      icon: '🌙',
-      title: 'Beautiful Dark Mode',
-      description: 'UI modern dengan dark mode support. Nyaman digunakan siang atau malam'
+      icon: 'moon',
+      title: 'Refined Dark Mode',
+      description: 'Engineered for late-night productivity with beautiful dark-theme contrast.',
+      iconBg: 'bg-indigo-50 dark:bg-indigo-500/10',
+      iconColor: 'text-indigo-600 dark:text-indigo-400',
     },
     {
-      icon: '⚡',
-      title: 'Built in 1 Day with laju.dev',
-      description: 'Production-ready app dengan 55+ features. Bukti kekuatan modern framework!'
-    },
-    {
-      icon: '🏥',
+      icon: 'activity',
       title: 'Link Health Monitoring',
-      description: 'Auto-detect broken links, SSL issues, dan malware scanning. Keep your links safe & working 24/7!'
-    },
-    {
-      icon: '🎯',
-      title: 'Smart Routing & Personalization',
-      description: 'Route traffic berdasarkan time, location, device, atau language. Perfect untuk targeted campaigns!'
-    },
-    {
-      icon: '🔌',
-      title: 'API & Integrations Ready',
-      description: 'RESTful API, Webhooks, Browser Extension. Integrate seamlessly dengan workflow Anda!'
+      description: 'We pro-actively detect broken destinations, SSL expirations, and security risks.',
+      iconBg: 'bg-teal-50 dark:bg-teal-500/10',
+      iconColor: 'text-teal-600 dark:text-teal-400',
     }
+  ];
+
+  // Stats data
+  const stats = [
+    { value: '10K+', label: 'Links Shortened' },
+    { value: '50K+', label: 'Total Clicks' },
+    { value: '99.9%', label: 'Uptime' },
+    { value: '<200ms', label: 'Redirect Speed' }
   ];
 </script>
 
-<div class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+<div class="min-h-screen bg-gray-50/50 dark:bg-[#0B1120] text-gray-900 dark:text-gray-100 font-sans selection:bg-brand-orange-500/30">
+
+  <!-- Subtle UI Pattern Background -->
+  <div class="fixed inset-0 pointer-events-none z-0 mix-blend-multiply dark:mix-blend-overlay opacity-40 dark:opacity-20 translate-z-0">
+    <div class="absolute inset-0 bg-grid"></div>
+  </div>
+
+  <!-- Soft Glow Orbs -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+    <div class="absolute -top-[20%] -right-[10%] w-[500px] h-[500px] rounded-full bg-orange-500/10 blur-[120px]"></div>
+    <div class="absolute top-[20%] -left-[10%] w-[400px] h-[400px] rounded-full bg-cyan-500/10 blur-[120px]"></div>
+  </div>
+
   <!-- Header -->
-    <header class="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-800">
-        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <a href="/" class="flex items-center gap-2 text-2xl">
-                    <div class="relative">
-                        <img src="/public/favicon-32x32.png" alt="KlikAja Logo" class="w-8 h-8">
-                    </div>
-                    <span class="font-bold">
-                        <span class="text-[#FF6B35]">Klik</span><span class="text-[#004E89] dark:text-white">Aja</span>
-                    </span>
-                </a>
+  <header class="relative bg-white/70 dark:bg-[#0B1120]/70 backdrop-blur-xl shadow-sm border-b border-gray-200/50 dark:border-white/5 sticky top-0 z-50 transition-colors">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <a href="/" class="flex items-center gap-2 group">
+          <KlikAjaLogo size="default" />
+        </a>
 
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="/about" class="text-gray-700 dark:text-gray-300 hover:text-[#FF6B35] dark:hover:text-[#00D9FF] transition-colors font-medium">
-                        Tentang
-                    </a>
-                    <a href="/features" class="text-gray-700 dark:text-gray-300 hover:text-[#FF6B35] dark:hover:text-[#00D9FF] transition-colors font-medium">
-                        Fitur
-                    </a>
-                    <a href="/pricing" class="text-gray-700 dark:text-gray-300 hover:text-[#FF6B35] dark:hover:text-[#00D9FF] transition-colors font-medium">
-                        Harga
-                    </a>
-                    <a href="/login" class="text-[#FF6B35] dark:text-[#00D9FF] hover:text-[#004E89] dark:hover:text-[#FF6B35] font-semibold transition-colors">
-                        Masuk
-                    </a>
-                    <a href="/register" class="bg-[#FF6B35] hover:bg-[#004E89] text-white font-semibold px-4 py-2 rounded-lg transition-all shadow-md hover:shadow-lg">
-                        Daftar Gratis
-                    </a>
-                </div>
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center space-x-2">
+          <a href="#features" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">Features</a>
+          <a href="#pricing" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">Pricing</a>
+          <a href="/about" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">About</a>
+          <div class="w-px h-5 bg-gray-300 dark:bg-gray-700 mx-2"></div>
+          <a href="/login" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors">Sign In</a>
+          <a href="/register" class="bg-gray-900 text-white dark:bg-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 text-sm font-medium px-4 py-2 rounded-lg transition-all shadow-sm">
+            Get Started Free
+          </a>
+        </div>
 
-                <!-- Mobile Menu Button -->
-                <button
-                    onclick={() => mobileMenuOpen = !mobileMenuOpen}
-                    class="md:hidden p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                    aria-label="Toggle menu"
-                >
-                    {#if mobileMenuOpen}
-                        <!-- Close Icon -->
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                    {:else}
-                        <!-- Hamburger Icon -->
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                        </svg>
-                    {/if}
-                </button>
+        <!-- Mobile Menu Button -->
+        <button
+          onclick={() => mobileMenuOpen = !mobileMenuOpen}
+          class="md:hidden p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5 rounded-lg transition-colors"
+          aria-label="Toggle menu"
+        >
+          {#if mobileMenuOpen}
+            <Icon name="close" size={20} />
+          {:else}
+            <Icon name="menu" size={20} />
+          {/if}
+        </button>
+      </div>
+
+      <!-- Mobile Navigation -->
+      {#if mobileMenuOpen}
+        <div class="md:hidden py-4 border-t border-gray-100 dark:border-white/5 animate-slide-down bg-white dark:bg-[#0B1120]">
+          <div class="flex flex-col space-y-1">
+            <a href="#features" class="block px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 rounded-lg">Features</a>
+            <a href="#pricing" class="block px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 rounded-lg">Pricing</a>
+            <a href="/about" class="block px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 rounded-lg">About</a>
+            <a href="/login" class="block px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 rounded-lg">Sign In</a>
+            <div class="pt-2 px-4">
+              <a href="/register" class="block w-full text-center bg-gray-900 text-white dark:bg-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 text-sm font-medium px-4 py-2 rounded-lg transition-all shadow-sm">
+                Get Started Free
+              </a>
             </div>
-
-            <!-- Mobile Navigation -->
-            {#if mobileMenuOpen}
-                <div class="md:hidden py-4 border-t border-gray-200 dark:border-gray-800">
-                    <div class="flex flex-col space-y-3">
-                        <a href="/about" class="text-gray-700 dark:text-gray-300 hover:text-[#FF6B35] dark:hover:text-[#00D9FF] transition-colors font-medium px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">
-                            Tentang
-                        </a>
-                        <a href="/features" class="text-gray-700 dark:text-gray-300 hover:text-[#FF6B35] dark:hover:text-[#00D9FF] transition-colors font-medium px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">
-                            Fitur
-                        </a>
-                        <a href="/pricing" class="text-gray-700 dark:text-gray-300 hover:text-[#FF6B35] dark:hover:text-[#00D9FF] transition-colors font-medium px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">
-                            Harga
-                        </a>
-                        <div class="border-t border-gray-200 dark:border-gray-800 pt-3 mt-3 space-y-3">
-                            <a href="/login" class="block text-center text-[#FF6B35] dark:text-[#00D9FF] hover:text-[#004E89] dark:hover:text-[#FF6B35] font-semibold px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                                Masuk
-                            </a>
-                            <a href="/register" class="block text-center bg-[#FF6B35] hover:bg-[#004E89] text-white font-semibold px-4 py-3 rounded-lg transition-all shadow-md hover:shadow-lg">
-                                Daftar Gratis
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            {/if}
-        </nav>
-    </header>
+          </div>
+        </div>
+      {/if}
+    </nav>
+  </header>
 
   <!-- Hero Section -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
- 
+  <section class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 z-10">
+    <div class="text-center mb-16 animate-slide-up">
+      <!-- Minimal Badge -->
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-sm font-medium text-gray-600 dark:text-gray-300 mb-8 shadow-sm">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+        </span>
+        Trusted by premium teams globally
+      </div>
 
-    <div class="text-center mb-12">
-      <h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4">
-        <span class="text-[#FF6B35]">Satu Klik</span>, Semua Terhubung
+      <!-- Main Headline -->
+      <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold text-gray-900 dark:text-white mb-6 tracking-tight text-balance leading-tight">
+        Smarter Links,<br />
+        <span class="bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-orange-600 to-orange-500 dark:from-white dark:via-orange-400 dark:to-orange-500">
+          Better Connections.
+        </span>
       </h1>
-      <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-400 mb-2">
-        Link yang lebih <span class="text-[#004E89] dark:text-[#00D9FF] font-semibold">cerdas</span>, 
-        lebih <span class="text-[#004E89] dark:text-[#00D9FF] font-semibold">cepat</span>, 
-        dan lebih <span class="text-[#004E89] dark:text-[#00D9FF] font-semibold">terukur</span>
+
+      <p class="text-lg md:text-xl text-gray-500 dark:text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed text-balance">
+        Shorten, track, and optimize your links securely. No friction, beautiful analytics, built for modern teams.
       </p>
-      <p class="text-gray-500 dark:text-gray-500">
-        Perpendek, lacak, dan optimalkan link Anda dengan mudah
-      </p>
+
+      <!-- Stats -->
+      <div class="flex flex-wrap justify-center gap-x-12 gap-y-8 mb-16 border-y border-gray-200/50 dark:border-white/5 py-8 max-w-3xl mx-auto">
+        {#each stats as stat}
+          <div class="text-center">
+            <div class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{stat.value}</div>
+            <div class="text-sm font-medium text-gray-500 dark:text-gray-400 mt-1 uppercase tracking-wider">{stat.label}</div>
+          </div>
+        {/each}
+      </div>
     </div>
 
-    <!-- Quick Shorten Widget -->
-    <div class="max-w-3xl mx-auto">
-      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 md:p-8 border border-gray-200 dark:border-gray-700">
-        <form onsubmit={handleShorten} class="space-y-4">
-          <!-- URL Input -->
-          <div>
-            <label for="url" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-              Paste Link Panjang Anda
-            </label>
-            <input
-              bind:value={url}
-              type="url"
-              id="url"
-              placeholder="https://example.com/very-long-url-here"
-              required
-              class="w-full bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-4 py-3 focus:border-[#FF6B35] focus:ring-0 focus:outline-none transition-colors duration-150"
-            />
-          </div>
+    <!-- URL Component -->
+    <div class="max-w-3xl mx-auto animate-slide-up" style="animation-delay: 0.1s;">
+      <div class="relative group">
+        <!-- Glow backing -->
+        <div class="absolute -inset-1 bg-gradient-to-b from-orange-500/20 to-transparent dark:from-orange-400/20 dark:to-transparent rounded-3xl blur-md opacity-0 group-hover:opacity-100 transition duration-700"></div>
 
-          <!-- Custom Alias (Optional) -->
-          <div>
-            <label for="alias" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-              Custom Alias <span class="text-gray-400 font-normal">(opsional)</span>
-            </label>
-            <div class="relative">
-              <div class="flex items-center gap-2">
-                <span class="text-gray-500 dark:text-gray-400 text-sm">klikaja.app/</span>
+        <div class="relative bg-white dark:bg-[#111827] rounded-3xl shadow-xl shadow-gray-200/50 dark:shadow-none p-6 md:p-8 border border-gray-200 dark:border-white/10">
+          <form onsubmit={handleShorten} class="space-y-6">
+
+            <!-- Long URL Input -->
+            <div>
+              <label for="url" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Destination URL</label>
+              <div class="relative flex items-center">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400">
+                  <Icon name="link" size={20} />
+                </div>
+                <input
+                  bind:value={url}
+                  type="url"
+                  id="url"
+                  placeholder="https://example.com/very-long-url-here"
+                  required
+                  class="w-full pl-11 pr-4 py-3 bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 dark:focus:ring-orange-400/50 focus:border-transparent transition-all"
+                />
+              </div>
+            </div>
+
+            <!-- Custom Domain/Alias -->
+            <div>
+              <label for="alias" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                Custom Link <span class="text-gray-400 font-normal ml-1">(Optional)</span>
+              </label>
+              <div class="flex items-center">
+                <div class="px-4 py-3 bg-gray-100 dark:bg-white/5 border border-r-0 border-gray-200 dark:border-white/10 rounded-l-xl text-gray-500 dark:text-gray-400 text-sm font-medium whitespace-nowrap">
+                  klikaja.app/
+                </div>
                 <div class="flex-1 relative">
                   <input
                     bind:value={customAlias}
                     type="text"
                     id="alias"
-                    placeholder="promo-ramadan"
-                    class="w-full bg-white dark:bg-gray-700 border-2 {aliasAvailable === false ? 'border-red-500' : aliasAvailable === true ? 'border-green-500' : 'border-gray-300 dark:border-gray-600'} text-gray-900 dark:text-white rounded-lg px-4 py-3 pr-10 focus:border-[#FF6B35] focus:ring-0 focus:outline-none transition-colors duration-150"
+                    placeholder="my-campaign"
+                    class="w-full pr-10 pl-4 py-3 bg-white dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-r-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500/50 dark:focus:ring-orange-400/50 focus:border-transparent transition-all"
                   />
+                  <!-- Availability Icon -->
                   {#if isCheckingAlias}
                     <div class="absolute right-3 top-1/2 -translate-y-1/2">
-                      <svg class="animate-spin h-5 w-5 text-gray-400" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
+                      <Icon name="loader" size={20} class="animate-spin text-gray-400" />
                     </div>
                   {:else if customAlias && aliasAvailable === true}
                     <div class="absolute right-3 top-1/2 -translate-y-1/2 text-green-500">
-                      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                      </svg>
+                      <Icon name="check" size={20} />
                     </div>
                   {:else if customAlias && aliasAvailable === false}
                     <div class="absolute right-3 top-1/2 -translate-y-1/2 text-red-500">
-                      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                      </svg>
+                      <Icon name="x" size={20} />
                     </div>
                   {/if}
                 </div>
               </div>
+              <!-- Status Messages -->
               {#if customAlias && aliasAvailable === false}
-                <p class="mt-2 text-sm text-red-600 dark:text-red-400">
-                  ❌ Alias sudah digunakan, pilih yang lain
+                <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-1 font-medium">
+                  <Icon name="alert-circle" size={16} />
+                  This link is already taken
                 </p>
               {:else if customAlias && aliasAvailable === true}
-                <p class="mt-2 text-sm text-green-600 dark:text-green-400">
-                  ✅ Alias tersedia!
+                <p class="mt-2 text-sm text-green-600 dark:text-green-400 flex items-center gap-1 font-medium">
+                  <Icon name="check-circle" size={16} />
+                  Link is available!
                 </p>
               {/if}
             </div>
-          </div>
 
-          <!-- Advanced Options -->
-          <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
-            <button
-              type="button"
-              onclick={() => isAdvancedOpen = !isAdvancedOpen}
-              class="w-full flex items-center justify-between text-left px-4 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-200"
-            >
-              <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                ⚙️ Advanced Options
-              </span>
-              <svg
-                class="w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform duration-200"
-                class:rotate-180={isAdvancedOpen}
-                fill="currentColor"
-                viewBox="0 0 20 20"
+            <!-- Advanced Options Toggle -->
+            <div class="border-t border-gray-100 dark:border-white/5 pt-4">
+              <button
+                type="button"
+                onclick={() => isAdvancedOpen = !isAdvancedOpen}
+                class="w-full flex items-center justify-between text-left px-4 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors duration-200 border border-transparent hover:border-gray-200 dark:hover:border-white/10"
               >
-                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
-              </svg>
+                <span class="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                  <Icon name="shield" size={16} class="text-gray-500" />
+                  Link Security & Targeting
+                </span>
+                <Icon
+                  name="chevron-down"
+                  size={20}
+                  class={isAdvancedOpen ? 'rotate-180 text-gray-500' : 'text-gray-500'}
+                />
+              </button>
+
+              {#if isAdvancedOpen}
+                <div class="mt-4 px-4 pb-2 space-y-5 animate-slide-down">
+                  <!-- Password -->
+                  <div>
+                    <label for="password" class="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                       <Icon name="lock" size={16} class="text-gray-500" />
+                       Password Protection
+                    </label>
+                    <input
+                      bind:value={password}
+                      type="password"
+                      id="password"
+                      placeholder="Optional. Leave blank to disable."
+                      class="w-full px-4 py-2.5 bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-white/20 transition-all"
+                    />
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Expiration -->
+                    <div>
+                      <label for="expiresAt" class="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                        <Icon name="clock" size={16} class="text-gray-500" />
+                        Valid Until
+                      </label>
+                      <input
+                        bind:value={expiresAt}
+                        type="datetime-local"
+                        id="expiresAt"
+                        class="w-full px-4 py-2.5 bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-white/20 transition-all"
+                      />
+                    </div>
+
+                    <!-- Max Clicks -->
+                    <div>
+                      <label for="maxClicks" class="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                        <Icon name="target" size={16} class="text-gray-500" />
+                        Max Clicks
+                      </label>
+                      <input
+                        bind:value={maxClicks}
+                        type="number"
+                        id="maxClicks"
+                        min="1"
+                        placeholder="Unlimited"
+                        class="w-full px-4 py-2.5 bg-gray-50/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-white/20 transition-all"
+                      />
+                    </div>
+                  </div>
+                </div>
+              {/if}
+            </div>
+
+            <!-- Submit Action -->
+            <button
+              type="submit"
+              disabled={isLoading || (customAlias && aliasAvailable === false)}
+              class="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-500/50 text-white font-semibold py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-orange-500/20 active:scale-[0.98]"
+            >
+              {#if isLoading}
+                <Icon name="loader" size={20} class="animate-spin" />
+                Processing...
+              {:else}
+                <Icon name="link" size={20} />
+                Shorten Link
+              {/if}
             </button>
 
-            {#if isAdvancedOpen}
-              <div class="mt-4 space-y-4 px-4">
-                <!-- Password Protection -->
-                <div>
-                  <label for="password" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    🔒 Password Protection
-                  </label>
-                  <input
-                    bind:value={password}
-                    type="password"
-                    id="password"
-                    placeholder="Kosongkan jika tidak perlu password"
-                    class="w-full bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-4 py-3 focus:border-[#FF6B35] focus:ring-0 focus:outline-none transition-colors duration-150"
-                  />
-                  <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                    User harus memasukkan password sebelum redirect
-                  </p>
-                </div>
-
-                <!-- Expiration Date -->
-                <div>
-                  <label for="expiresAt" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    ⏰ Expiration Date
-                  </label>
-                  <input
-                    bind:value={expiresAt}
-                    type="datetime-local"
-                    id="expiresAt"
-                    class="w-full bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-4 py-3 focus:border-[#FF6B35] focus:ring-0 focus:outline-none transition-colors duration-150"
-                  />
-                  <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                    Link akan otomatis nonaktif setelah tanggal ini
-                  </p>
-                </div>
-
-                <!-- Max Clicks -->
-                <div>
-                  <label for="maxClicks" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    🎯 Maximum Clicks
-                  </label>
-                  <input
-                    bind:value={maxClicks}
-                    type="number"
-                    id="maxClicks"
-                    min="1"
-                    placeholder="Unlimited"
-                    class="w-full bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-4 py-3 focus:border-[#FF6B35] focus:ring-0 focus:outline-none transition-colors duration-150"
-                  />
-                  <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                    Link akan otomatis nonaktif setelah mencapai jumlah klik ini
-                  </p>
-                </div>
-              </div>
-            {/if}
-          </div>
-
-          <!-- Submit Button -->
-          <button
-            type="submit"
-            disabled={isLoading || (customAlias && aliasAvailable === false)}
-            class="w-full bg-[#FF6B35] hover:bg-[#004E89] text-white font-bold py-4 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-          >
-            {#if isLoading}
-              <span class="flex items-center justify-center gap-2">
-                <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Memproses...
+            <!-- Mini Benefits -->
+            <div class="flex items-center justify-center gap-6 pt-2">
+              <span class="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400">
+                <Icon name="check" size={14} class="text-gray-400" />
+                No login required
               </span>
-            {:else}
-              🚀 Perpendek Sekarang
-            {/if}
-          </button>
-
-          <p class="text-xs text-center text-gray-500 dark:text-gray-400">
-            Tanpa login • Gratis • Hasil instan • Bisa diklaim nanti
-          </p>
-        </form>
+              <span class="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400">
+                <Icon name="check" size={14} class="text-gray-400" />
+                100% Free
+              </span>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Features Section -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-white dark:bg-gray-800/50 rounded-3xl my-16">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-        Kenapa Pilih <span class="text-[#FF6B35]">KlikAja</span>?
+  <!-- Professional Features Section -->
+  <section id="features" class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 z-10">
+    <div class="text-center mb-16 md:mb-24">
+      <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6">
+        Powerful Tools for Modern Teams
       </h2>
-      <p class="text-gray-600 dark:text-gray-400">
-        Fitur lengkap untuk kebutuhan link shortening Anda
+      <p class="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed text-balance">
+        Stop wrestling with complex tools. KlikAja delivers everything you need to connect, track, and manage all your links in one streamlined platform.
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {#each features as feature}
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-[#FF6B35] dark:hover:border-[#00D9FF] transition-all duration-200 hover:shadow-lg">
-          <div class="text-4xl mb-4">{feature.icon}</div>
-          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
-            {feature.title}
-          </h3>
-          <p class="text-gray-600 dark:text-gray-400">
-            {feature.description}
-          </p>
+    <!-- Feature Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {#each features as feature, i}
+        <div class="group bg-white dark:bg-[#111827] rounded-3xl p-8 border border-gray-100 dark:border-white/5 hover:border-gray-300 dark:hover:border-white/20 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+          <div class="flex flex-col gap-5">
+            <div class="w-14 h-14 rounded-2xl {feature.iconBg} {feature.iconColor} flex items-center justify-center mb-2 shadow-sm transform group-hover:scale-110 transition-transform duration-300">
+              <Icon name={feature.icon} size={24} />
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                {feature.title}
+              </h3>
+              <p class="text-gray-600 dark:text-gray-400 leading-relaxed text-sm md:text-base">
+                {feature.description}
+              </p>
+            </div>
+          </div>
         </div>
       {/each}
     </div>
   </section>
 
-  <!-- Comparison Section -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-        Perbandingan dengan <span class="text-[#FF6B35]">Kompetitor</span>
-      </h2>
-      <p class="text-gray-600 dark:text-gray-400">
-        Lihat kenapa KlikAja adalah pilihan terbaik untuk kebutuhan link shortening Anda
-      </p>
-    </div>
-
-    <!-- Comparison Table -->
-    <div class="overflow-x-auto">
-      <div class="inline-block min-w-full align-middle">
-        <div class="overflow-hidden border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg">
-          <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead class="bg-gradient-to-r from-[#FF6B35] to-[#004E89]">
-              <tr>
-                <th scope="col" class="px-6 py-4 text-left text-sm font-bold text-white uppercase tracking-wider">
-                  Fitur
-                </th>
-                <th scope="col" class="px-6 py-4 text-center text-sm font-bold text-white uppercase tracking-wider bg-white/10">
-                  <div class="flex items-center justify-center gap-2">
-                    <span>KlikAja</span>
-                    <span class="text-xl">🚀</span>
-                  </div>
-                </th>
-                <th scope="col" class="px-6 py-4 text-center text-sm font-bold text-white uppercase tracking-wider">
-                  Bitly
-                </th>
-                <th scope="col" class="px-6 py-4 text-center text-sm font-bold text-white uppercase tracking-wider">
-                  TinyURL
-                </th>
-                <th scope="col" class="px-6 py-4 text-center text-sm font-bold text-white uppercase tracking-wider">
-                  Short.io
-                </th>
-              </tr>
-            </thead>
-            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-              <!-- No Login Required -->
-              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                  Tanpa Login
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/20">
-                  <span class="text-2xl">✅</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-2xl">❌</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-2xl">✅</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-2xl">❌</span>
-                </td>
-              </tr>
-
-              <!-- Custom Alias -->
-              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                  Custom Alias Gratis
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/20">
-                  <span class="text-2xl">✅</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-sm text-gray-500 dark:text-gray-400">💰 Paid</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-2xl">❌</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-sm text-gray-500 dark:text-gray-400">💰 Paid</span>
-                </td>
-              </tr>
-
-              <!-- Link Rotation -->
-              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
-                  <div>Link Rotation</div>
-                  <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Sequential, Random, Weighted</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/20">
-                  <span class="text-2xl">✅</span>
-                  <div class="text-xs text-green-600 dark:text-green-400 font-semibold mt-1">3 Methods</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-2xl">❌</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-2xl">❌</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-sm text-gray-500 dark:text-gray-400">💰 Paid</span>
-                </td>
-              </tr>
-
-              <!-- Analytics -->
-              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
-                  <div>Analytics Dashboard</div>
-                  <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Geo, Device, Browser, OS</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/20">
-                  <span class="text-2xl">✅</span>
-                  <div class="text-xs text-green-600 dark:text-green-400 font-semibold mt-1">Unlimited</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-sm text-gray-500 dark:text-gray-400">💰 Limited</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-2xl">❌</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-sm text-gray-500 dark:text-gray-400">💰 Paid</span>
-                </td>
-              </tr>
-
-              <!-- Password Protection -->
-              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                  Password Protection
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/20">
-                  <span class="text-2xl">✅</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-sm text-gray-500 dark:text-gray-400">💰 Paid</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-2xl">❌</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-sm text-gray-500 dark:text-gray-400">💰 Paid</span>
-                </td>
-              </tr>
-
-              <!-- QR Code -->
-              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                  Auto QR Code
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/20">
-                  <span class="text-2xl">✅</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-sm text-gray-500 dark:text-gray-400">💰 Paid</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-2xl">✅</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-2xl">✅</span>
-                </td>
-              </tr>
-
-              <!-- Open Source -->
-              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                  Open Source & Self-Host
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/20">
-                  <span class="text-2xl">✅</span>
-                  <div class="text-xs text-green-600 dark:text-green-400 font-semibold mt-1">MIT License</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-2xl">❌</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-2xl">❌</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-2xl">❌</span>
-                </td>
-              </tr>
-
-              <!-- Link Expiration -->
-              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                  Link Expiration & Click Limit
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/20">
-                  <span class="text-2xl">✅</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-sm text-gray-500 dark:text-gray-400">💰 Paid</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-2xl">❌</span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <span class="text-sm text-gray-500 dark:text-gray-400">💰 Paid</span>
-                </td>
-              </tr>
-
-              <!-- Price -->
-              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors border-t-2 border-[#FF6B35]/30">
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">
-                  Harga
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center bg-green-50 dark:bg-green-900/20">
-                  <div class="text-2xl font-bold text-green-600 dark:text-green-400">FREE</div> 
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <div class="text-lg font-bold text-gray-900 dark:text-white">$29/mo</div>
-                  <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Pro Plan</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <div class="text-lg font-bold text-gray-900 dark:text-white">$9.99/mo</div>
-                  <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Premium</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-center">
-                  <div class="text-lg font-bold text-gray-900 dark:text-white">$20/mo</div>
-                  <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Starter</div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- Key Advantages -->
-    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-6 rounded-2xl border-2 border-green-500/30 dark:border-green-600/30">
-        <div class="text-3xl mb-3">💰</div>
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">
-          100% Gratis
-        </h3>
-        <p class="text-sm text-gray-600 dark:text-gray-400">
-          Semua fitur premium tanpa biaya bulanan. Kompetitor charge $9-$29/bulan untuk fitur yang sama!
-        </p>
-      </div>
-
-      <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-6 rounded-2xl border-2 border-blue-500/30 dark:border-blue-600/30">
-        <div class="text-3xl mb-3">🔓</div>
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">
-          Open Source & Transparan
-        </h3>
-        <p class="text-sm text-gray-600 dark:text-gray-400">
-          Kode terbuka, dapat diaudit, dan self-host unlimited. Kompetitor closed-source dengan vendor lock-in!
-        </p>
-      </div>
-
-      <div class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-6 rounded-2xl border-2 border-purple-500/30 dark:border-purple-600/30">
-        <div class="text-3xl mb-3">⚡</div>
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">
-          Fitur Unik: Link Rotation
-        </h3>
-        <p class="text-sm text-gray-600 dark:text-gray-400">
-          3 metode rotation untuk A/B testing & load balancing. Fitur ini tidak ada di kompetitor atau berbayar!
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Roadmap Section -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-        🗺️ Roadmap Pengembangan
-      </h2>
-      <p class="text-gray-600 dark:text-gray-400">
-        Kami terus berinovasi untuk memberikan pengalaman terbaik
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <!-- Phase 1: MVP - COMPLETED -->
-      <div class="relative">
-        <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-6 rounded-2xl border-2 border-green-500 dark:border-green-600 shadow-lg">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="text-xl font-bold text-gray-900 dark:text-white">
-              Phase 1: MVP
-            </h3>
-            <span class="bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-              ✅ LIVE
-            </span>
-          </div>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
-            Nov 2025
-          </p>
-          <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-            <li class="flex items-start gap-2">
-              <span class="text-green-500 mt-0.5">✓</span>
-              <span>Link shortening & custom alias</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-green-500 mt-0.5">✓</span>
-              <span>URL rotation (Sequential, Random, Weighted)</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-green-500 mt-0.5">✓</span>
-              <span>Password protection & expiration</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-green-500 mt-0.5">✓</span>
-              <span>Analytics dashboard & QR codes</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-green-500 mt-0.5">✓</span>
-              <span>Dark mode & mobile responsive</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Phase 2: Enhanced Features - IN PROGRESS -->
-      <div class="relative">
-        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-6 rounded-2xl border-2 border-blue-500 dark:border-blue-600 shadow-lg">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="text-xl font-bold text-gray-900 dark:text-white">
-              Phase 2: Enhanced
-            </h3>
-            <span class="bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse">
-              🔄 NEXT
-            </span>
-          </div>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
-            Dec 2025 - Jan 2026
-          </p>
-          <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-            <li class="flex items-start gap-2">
-              <span class="text-blue-500 mt-0.5">⏳</span>
-              <span>Link health monitoring</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-blue-500 mt-0.5">⏳</span>
-              <span>Real-time analytics (WebSocket)</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-blue-500 mt-0.5">⏳</span>
-              <span>Team collaboration & workspaces</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-blue-500 mt-0.5">⏳</span>
-              <span>Custom branded domains</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-blue-500 mt-0.5">⏳</span>
-              <span>Advanced link scheduling</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Phase 3: Premium Features - PLANNED -->
-      <div class="relative">
-        <div class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 p-6 rounded-2xl border-2 border-purple-500 dark:border-purple-600 shadow-lg">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="text-xl font-bold text-gray-900 dark:text-white">
-              Phase 3: Premium
-            </h3>
-            <span class="bg-purple-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-              📋 PLANNED
-            </span>
-          </div>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
-            Q1 2026
-          </p>
-          <ul class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-            <li class="flex items-start gap-2">
-              <span class="text-purple-500 mt-0.5">○</span>
-              <span>API for developers</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-purple-500 mt-0.5">○</span>
-              <span>A/B testing for links</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-purple-500 mt-0.5">○</span>
-              <span>Integrations (Zapier, Slack, etc)</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-purple-500 mt-0.5">○</span>
-              <span>Advanced geo-targeting</span>
-            </li>
-            <li class="flex items-start gap-2">
-              <span class="text-purple-500 mt-0.5">○</span>
-              <span>White-label solutions</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- Feedback CTA -->
-    <div class="mt-12 text-center">
-      <div class="inline-block bg-gradient-to-r from-[#FF6B35]/10 to-[#004E89]/10 dark:from-[#FF6B35]/20 dark:to-[#00D9FF]/20 rounded-2xl p-6 border border-[#FF6B35]/30 dark:border-[#00D9FF]/30">
-        <p class="text-gray-700 dark:text-gray-300 mb-3">
-          💡 <span class="font-semibold">Punya ide fitur?</span> Kami ingin mendengar dari Anda!
-        </p>
-        <a 
-          href="mailto:maulana@drip.id?subject=Feature Request - KlikAja" 
-          class="inline-flex items-center gap-2 bg-[#FF6B35] hover:bg-[#ff5722] text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
-        >
-          <span>📧</span>
-          <span>Kirim Saran Fitur</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Open Source Section -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <div class="bg-gradient-to-br from-gray-900 to-gray-800 dark:from-gray-800 dark:to-gray-900 rounded-3xl p-8 md:p-12 text-white shadow-2xl border border-gray-700">
-      <div class="flex flex-col md:flex-row items-center gap-8">
-        <!-- Left: Content -->
-        <div class="flex-1 text-center md:text-left">
-          <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-4">
-            <span class="text-2xl">⭐</span>
-            <span class="text-sm font-semibold">100% Open Source</span>
-          </div>
-          <h2 class="text-3xl md:text-4xl font-bold mb-4">
-            Gratis, Terbuka, dan Transparan
-          </h2>
-          <p class="text-lg text-gray-300 mb-6">
-            KlikAja adalah proyek open source yang dapat Anda gunakan, modifikasi, dan deploy sendiri. 
-            Kode sumber tersedia untuk semua orang di GitHub.
-          </p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-            <a 
-              href="https://github.com/maulanashalihin/klikaja" 
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center justify-center gap-2 bg-white text-gray-900 font-bold px-6 py-3 rounded-lg hover:bg-gray-100 transition-all duration-200 shadow-lg hover:shadow-xl"
-            >
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-              </svg>
-              <span>View on GitHub</span>
-            </a>
-            <a 
-              href="https://github.com/maulanashalihin/klikaja/blob/main/LICENSE" 
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center justify-center gap-2 bg-white/10 backdrop-blur-sm border-2 border-white/20 text-white font-semibold px-6 py-3 rounded-lg hover:bg-white/20 transition-all duration-200"
-            >
-              <span>📄</span>
-              <span>MIT License</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Right: Stats -->
-        <div class="flex-shrink-0">
-          <div class="grid grid-cols-2 gap-4">
-            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
-              <div class="text-3xl font-bold text-[#00D9FF]">100%</div>
-              <div class="text-sm text-gray-300 mt-1">Free</div>
-            </div>
-            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
-              <div class="text-3xl font-bold text-[#00D9FF]">MIT</div>
-              <div class="text-sm text-gray-300 mt-1">License</div>
-            </div>
-            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
-              <div class="text-3xl font-bold text-[#00D9FF]">⭐</div>
-              <div class="text-sm text-gray-300 mt-1">Star on GitHub</div>
-            </div>
-            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center border border-white/20">
-              <div class="text-3xl font-bold text-[#00D9FF]">🚀</div>
-              <div class="text-sm text-gray-300 mt-1">Self-Host</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tech Stack -->
-      <div class="mt-8 pt-8 border-t border-white/20">
-        <div class="text-center mb-4">
-          <div class="inline-flex items-center gap-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 px-4 py-2 rounded-full mb-3">
-            <span class="text-2xl">⚡</span>
-            <span class="text-sm font-bold text-green-300">Built in 1 Day!</span>
-          </div>
-          <p class="text-sm text-gray-400">
-            Powered by <a href="https://laju.dev" target="_blank" rel="noopener" class="text-[#00D9FF] hover:underline font-semibold">laju.dev</a> - Modern fullstack framework
-          </p>
-        </div>
-        <p class="text-sm text-gray-400 text-center mb-4 mt-6">with modern technologies:</p>
-        <div class="flex flex-wrap justify-center gap-3">
-          <span class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg text-sm border border-white/20">Svelte 5</span>
-          <span class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg text-sm border border-white/20">HyperExpress</span>
-          <span class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg text-sm border border-white/20">SQLite</span>
-          <span class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg text-sm border border-white/20">TailwindCSS</span>
-          <span class="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg text-sm border border-white/20">TypeScript</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- CTA Section -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-    <div class="bg-gradient-to-r from-[#FF6B35] to-[#004E89] rounded-3xl p-12 text-white">
-      <h2 class="text-3xl md:text-4xl font-bold mb-4">
-        Siap Untuk Mulai?
-      </h2>
-      <p class="text-xl mb-8 opacity-90">
-        Gunakan hosted version atau deploy sendiri - pilihan ada di tangan Anda!
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="/register" class="inline-block bg-white text-[#FF6B35] font-bold py-4 px-8 rounded-lg hover:bg-gray-100 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-          Coba Hosted Version
-        </a>
-        <a href="https://github.com/maulanashalihin/klikaja#installation" target="_blank" rel="noopener noreferrer" class="inline-block bg-white/10 backdrop-blur-sm border-2 border-white text-white font-bold py-4 px-8 rounded-lg hover:bg-white/20 transition-all duration-200">
-          Self-Host Guide
-        </a>
+  <section class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 z-10">
+    <div class="relative overflow-hidden rounded-[2.5rem] bg-gray-900 dark:bg-black p-10 md:p-20 shadow-2xl border border-gray-800 dark:border-white/10 text-center">
+      <!-- Ambient Lights glow -->
+      <div class="absolute inset-0 z-0">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-orange-500/20 blur-[150px] rounded-full pointer-events-none"></div>
+      </div>
+
+      <div class="relative z-10 max-w-3xl mx-auto">
+        <h2 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 tracking-tight">
+          Ready to scale your reach?
+        </h2>
+        <p class="text-lg md:text-xl text-gray-400 mb-10 text-balance leading-relaxed">
+          Join thousands of creators and professional teams who trust KlikAja to power their most important links.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/register" class="inline-flex items-center justify-center px-8 py-4 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition-all shadow-lg active:scale-95">
+            Create Free Account
+          </a>
+          <a href="/login" class="inline-flex items-center justify-center px-8 py-4 bg-gray-800 hover:bg-gray-700 text-white font-bold rounded-xl transition-all border border-gray-700 active:scale-95">
+            Talk to Sales
+          </a>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 mt-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <!-- Early Access Notice -->
-      <div class="text-center mb-6 pb-6 border-b border-gray-200 dark:border-gray-700">
-        <p class="text-sm text-gray-600 dark:text-gray-400">
-          🚀 <span class="font-semibold text-[#FF6B35]">Early Access</span> - KlikAja sedang dalam pengembangan aktif.
-        </p>
-        <p class="text-sm text-gray-500 dark:text-gray-500 mt-1">
-          Ada masalah? Hubungi kami di <a href="mailto:maulana@drip.id" class="text-[#FF6B35] hover:underline font-medium">maulana@drip.id</a>
-        </p>
-      </div>
-
-      <!-- Footer Links -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-        <div>
-          <h3 class="font-semibold text-gray-900 dark:text-white mb-3">Product</h3>
-          <ul class="space-y-2 text-sm">
-            <li><a href="/features" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">Fitur</a></li>
-            <li><a href="/pricing" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">Harga</a></li>
-            <li><a href="https://github.com/maulanashalihin/klikaja#installation" target="_blank" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">Self-Host</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="font-semibold text-gray-900 dark:text-white mb-3">Company</h3>
-          <ul class="space-y-2 text-sm">
-            <li><a href="/about" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">Tentang</a></li>
-            <li><a href="/contact" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">Kontak</a></li>
-            <li><a href="https://github.com/maulanashalihin/klikaja" target="_blank" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">GitHub</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="font-semibold text-gray-900 dark:text-white mb-3">Legal</h3>
-          <ul class="space-y-2 text-sm">
-            <li><a href="/privacy" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">Privacy Policy</a></li>
-            <li><a href="/terms" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">Terms of Service</a></li>
-            <li><a href="https://github.com/maulanashalihin/klikaja/blob/main/LICENSE" target="_blank" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">MIT License</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="font-semibold text-gray-900 dark:text-white mb-3">Resources</h3>
-          <ul class="space-y-2 text-sm">
-            <li><a href="https://github.com/maulanashalihin/klikaja#readme" target="_blank" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">Documentation</a></li>
-            <li><a href="https://github.com/maulanashalihin/klikaja/issues" target="_blank" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">Report Bug</a></li>
-            <li><a href="https://laju.dev" target="_blank" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors">Built with laju.dev</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 border-t border-gray-200 dark:border-gray-700">
+  <footer class="relative bg-white dark:bg-[#0B1120] border-t border-gray-200 dark:border-white/5 pb-12 pt-20 z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-8 mb-8 border-b border-gray-200/50 dark:border-white/5 pb-8">
         <div class="flex items-center gap-2">
           <KlikAjaLogo size="small" />
-          <span class="text-sm text-gray-500 dark:text-gray-400">
-            © 2025 KlikAja. Open Source under MIT License.
-          </span>
         </div>
-        <div class="flex gap-4 text-sm">
-          <a href="https://github.com/maulanashalihin/klikaja" target="_blank" rel="noopener" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors" aria-label="GitHub">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-            </svg>
-          </a>
-          <a href="mailto:maulana@drip.id" class="text-gray-600 hover:text-[#FF6B35] dark:text-gray-400 dark:hover:text-[#00D9FF] transition-colors" aria-label="Email">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-            </svg>
-          </a>
+        <div class="flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm font-medium text-gray-500 dark:text-gray-400">
+          <a href="/about" class="hover:text-gray-900 dark:hover:text-white transition-colors">About</a>
+          <a href="#features" class="hover:text-gray-900 dark:hover:text-white transition-colors">Features</a>
+          <a href="#pricing" class="hover:text-gray-900 dark:hover:text-white transition-colors">Pricing</a>
+          <a href="/privacy" class="hover:text-gray-900 dark:hover:text-white transition-colors">Privacy</a>
+          <a href="/terms" class="hover:text-gray-900 dark:hover:text-white transition-colors">Terms</a>
         </div>
+      </div>
+
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
+        <p>© {new Date().getFullYear()} KlikAja. All rights reserved.</p>
+        <p>Open Source Technology built with ❤️</p>
       </div>
     </div>
   </footer>

@@ -49,8 +49,8 @@ function toggleDarkMode() {
 }
 </script>
 
-<button 
-    on:click={toggleDarkMode}
+<button
+    onclick={toggleDarkMode}
     class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200"
     aria-label="Toggle dark mode"
 >

@@ -129,6 +129,11 @@ class AuthController {
          .limit(5)
          .select('*');
 
+      // Parse URLs from JSON
+      recentLinks.forEach(link => {
+         link.urls = JSON.parse(link.urls);
+      });
+
       // Calculate average clicks per link
       const avgClicksPerLink = totalLinks.count > 0 
          ? Math.round((totalClicks.total || 0) / totalLinks.count)
