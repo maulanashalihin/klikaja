@@ -57,6 +57,9 @@ class AuthController {
             .orderBy('created_at', 'desc')
             .limit(5)
             .select('*');
+        recentLinks.forEach(link => {
+            link.urls = JSON.parse(link.urls);
+        });
         const avgClicksPerLink = totalLinks.count > 0
             ? Math.round((totalClicks.total || 0) / totalLinks.count)
             : 0;

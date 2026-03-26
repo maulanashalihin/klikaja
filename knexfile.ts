@@ -1,4 +1,4 @@
-import type { Knex } from "knex"; 
+import type { Knex } from "knex";
 
 // Update with your config settings.
 
@@ -6,21 +6,18 @@ const config: { [key: string]: Knex.Config } = {
   development: {
     client: "better-sqlite3",
     connection: {
-      filename: "./dev.sqlite3"
+      filename: "./dev.sqlite3",
     },
-    useNullAsDefault : true
+    useNullAsDefault: true,
   },
 
   production: {
     client: "better-sqlite3",
     connection: {
-      filename: "../../klikaja-db/production.sqlite3"
+      filename: "./production.sqlite3",
     },
-    useNullAsDefault : true
+    useNullAsDefault: true,
   },
- 
- 
-
 };
 
-export default config
+export default config;

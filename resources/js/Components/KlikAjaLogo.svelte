@@ -12,6 +12,9 @@
 <div class="flex items-center gap-2 {sizes[size]}">
     <!-- Logo Icon -->
     <div class="relative w-8 h-8 flex items-center justify-center">
+        <div
+            class="absolute inset-0 bg-gradient-to-br from-brand-orange-400 to-brand-orange-600 rounded-lg blur opacity-30 animate-pulse-slow"
+        ></div>
         <img
             src="/public/favicon-96x96.png"
             alt="KlikAja Logo"
