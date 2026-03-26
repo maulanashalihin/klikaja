@@ -48,6 +48,7 @@ jobs:
             # Contoh untuk Node.js (sesuaikan dengan teknologi Anda)
             npm install
 
+            npm run build
 
             pm2 reload klikaja
 
